@@ -1,1 +1,49 @@
-<p>login works!</p>
+<mat-grid-list cols="12" rowHeight="20vh">
+    <mat-grid-tile></mat-grid-tile>
+</mat-grid-list>
+
+<mat-grid-list cols="3" rowHeight="470px" gutterSize="12%">
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile class="authentification">
+        <mat-grid-tile-header>
+            <img class="img-profil" src="assets/login.png">
+        </mat-grid-tile-header>
+        <form class="form-auth" [formGroup]="form" (ngSubmit)="login()">
+            
+            <mat-form-field class="field-form" appearance="outline">
+                <mat-label for="email">
+                  <mat-icon>person</mat-icon>
+                  Email
+                </mat-label>
+                <input type="text" name="email" matInput formControlName="email" [errorStateMatcher]="matcher">
+                <mat-error>
+                    L'email est <strong>obligatoire</strong>
+                  </mat-error>
+            </mat-form-field>
+              
+            <mat-form-field class="field-form" appearance="outline">
+                <mat-label for="password">
+                  <mat-icon>lock</mat-icon>
+                  Saisir un mot de passe
+            </mat-label>
+                
+            <input type="password" name="password" matInput [type]="hide ? 'password' : 'text'" formControlName="password" [errorStateMatcher]="matcher">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error>
+                Le mot de passe est <strong>obligatoire</strong>
+              </mat-error>
+            </mat-form-field>
+              
+            <div class="action_auth">
+              <button mat-raised-button class="button" type="submit" [disabled]="!form.valid">SE CONNECTER</button>
+            </div>
+            <div class="action_auth" style="margin-top: 20px; margin-left: 30px; margin-right: 30px; color:red" *ngIf="error">
+              {{error}}
+            </div>
+            <p class="forgot_password_auth"><strong><a>Mot de passe oublié ?</a></strong></p>
+        </form>
+    </mat-grid-tile>
+    <mat-grid-tile></mat-grid-tile>
+</mat-grid-list>
