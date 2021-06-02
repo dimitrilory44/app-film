@@ -1,1 +1,18 @@
+<mat-toolbar color="primary">
+    <a routerLink="dashboard" style="text-decoration: none;">
+        <span>Videothèque</span>
+    </a>
+   <span class="example-spacer"></span>
+   <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+     <mat-icon>favorite</mat-icon>
+   </button>
+   <button mat-icon-button (click)="logout()">
+    <mat-icon>exit_to_app</mat-icon>
+  </button>
+</mat-toolbar>
+<nav mat-tab-nav-bar mat-align-tabs="center"style="background-color: #c5e1a5;">
+    <a mat-tab-link *ngFor="let tabItem of tabs" [routerLink]="tabItem.route" routerLinkActive #rla="routerLinkActive"
+    [active]="rla.isActive" style="font-size: 20px">{{tabItem.label}}</a>
+</nav>
+<br><br>
 <router-outlet></router-outlet>

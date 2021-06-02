@@ -15,7 +15,6 @@ import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
 // Admin Side
-import { AdminRoutingModule } from './admin/admin-routing.module';
 import { AdminModule } from '../app/admin/admin.module';
 
 // Components
@@ -39,8 +38,7 @@ import { AdminComponent } from './admin/admin.component';
     AngularFireAuthModule,
     AppMaterialModule,
     AppRoutingModule,
-    AdminModule,
-    AdminRoutingModule
+    AdminModule
   ],
   providers: [],
   bootstrap: [AppComponent]

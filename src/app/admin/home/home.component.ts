@@ -1,20 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { Component, OnChanges, OnInit } from '@angular/core';
+import { FirebaseService } from 'src/app/shared/firebase.service';
+import { filmItem } from 'src/app/shared/models/film.models';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['../../sass/pages/_home.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnChanges {
 
-  constructor(private _auth :AngularFireAuth) { }
+  films! :filmItem [];
+  breakpoint!: number;
 
-  ngOnInit(): void {
+  constructor(private _db :FirebaseService) {}
+
+  ngOnInit() {
+    this.breakpoint = (window.innerWidth <= 900) ? 3 : 9;
+
+    this._db.getAll().subscribe((reponse) => {
+      this.films = reponse;
+    });
+  }
+  
+  ngOnChanges() {
+    this.breakpoint = (window.innerWidth <= 400) ? 2 : 9;
+
   }
 
-  logout() {
-    this._auth.signOut();
+  onResize(event :any) {
+    this.breakpoint = (event.target.innerWidth <= 400) ? 9 : 2;
   }
 
 }
