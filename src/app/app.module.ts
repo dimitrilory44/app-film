@@ -1,36 +1,46 @@
+// Core Angular
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
+// Modules Routing/Design
 import { AppMaterialModule } from './app-material.module';
+import { AppRoutingModule } from './app-routing.module';
 
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// Auth/Database
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
+// Admin Side
+import { AdminRoutingModule } from './admin/admin-routing.module';
+import { AdminModule } from '../app/admin/admin.module';
+
+// Components
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './login/login.component';
-import { environment } from 'src/environments/environment';
-import { HomeComponent } from './home/home.component';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    AdminComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AppMaterialModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule
+    AdminModule,
+    AdminRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

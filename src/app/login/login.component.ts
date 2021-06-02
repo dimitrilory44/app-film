@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
 
     this._auth.signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        this._router.navigate(['/home']);
+        this._router.navigate(['/admin/dashboard']);
         let user = userCredential.user;
       })
       .catch((error) => {
