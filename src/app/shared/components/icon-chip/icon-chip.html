@@ -1,0 +1,12 @@
+<div class="icon-chip">
+  <img [src]="iconUrl()" [alt]="label()" class="icon-chip__image">
+
+  <button
+    class="icon-chip__remove"
+    type="button"
+    [attr.aria-label]="'Retirer ' + label"
+    (click)="onRemove($event)"
+  >
+    <mat-icon>remove</mat-icon>
+  </button>
+</div>

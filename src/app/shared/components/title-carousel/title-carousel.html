@@ -1,0 +1,47 @@
+<div class="carousel-wrapper">
+    <div class="swiper" appSwiper [config]="swiperConfig">
+        <div class="swiper-wrapper">
+            @for (item of items(); track item.id) {
+                <div class="swiper-slide">
+                    <div
+                        class="netflix-card"
+                        [class.is-hovered]="hoveredMovieId() === item.id"
+                        (mouseenter)="onEnter(item.id)"
+                        (mouseleave)="onLeave()"
+                    >
+                        <img
+                            [src]="item.poster_path | tmdbImage:'w185'"
+                            [alt]="getTitle(item)"
+                            class="netflix-card__poster"
+                        />
+
+                        <div class="netflix-card__info">
+                            <p class="netflix-card__title">{{ getTitle(item) }}</p>
+
+                            <div class="netflix-card__actions">
+                                <button mat-icon-button class="btn-icon btn-icon--play">
+                                    <mat-icon>play_arrow</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-icon">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-icon">
+                                    <mat-icon>thumb_up</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-icon btn-icon--more">
+                                    <mat-icon>expand_more</mat-icon>
+                                </button>
+                            </div>
+
+                            <span class="match">{{ item.vote_average * 10 | number:'1.0-0' }}% match</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+</div>

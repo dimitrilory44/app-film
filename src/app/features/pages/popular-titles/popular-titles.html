@@ -1,0 +1,15 @@
+<title-filter [items]="titles()" [count]="totalResults()" [currentMediaType]="mediaType()"/>
+
+<div class="container">
+    @if (titles().length > 0) {
+        <title-list [items]="titles()" [loading]="loading()" (loadMore)="onLoadMore()"/>
+    } @else if (titlePopular.isLoading()) {
+        <mat-spinner diameter="32" />
+    } @else {
+        <img
+                mat-card-image
+                src="assets/no_results.png"
+                alt="Aucun film trouvé"
+            />
+    }
+</div>

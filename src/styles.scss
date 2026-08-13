@@ -1,1 +1,103 @@
-/* You can add global styles to this file, and also import other style files */
+// Include theming for Angular Material with `mat.theme()`.
+@use '@angular/material' as mat;
+@use 'swiper/css';
+@use 'swiper/css/navigation';
+@use 'swiper/css/pagination';
+
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  height: 100%;
+  --mat-sys-on-background: #e5e7eb!important;
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  color-scheme: light;
+  background-color: #0d1117;
+  color: var(--mat-sys-on-surface);
+  --mat-sys-on-surface: #e5e7eb;
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}
+
+.mat-mdc-chip-set .mdc-evolution-chip-set__chips {
+    min-width: 0!important;
+    margin-left: 15px!important;
+}
+
+mat-divider {
+  --mat-divider-color: #2a2d3a!important; // couleur proche du fond
+}
+
+.filter-menu {
+    background-color: #11151f !important;
+
+    .mat-mdc-menu-item {
+        color: #e5e7eb;
+
+        &:hover:not([disabled]),
+        &.cdk-program-focused:not([disabled]),
+        &.cdk-keyboard-focused:not([disabled]),
+        &.mat-mdc-menu-item-highlighted:not([disabled]) {
+            background-color: #f2a93b;
+            color: #11151f;
+        }
+    }
+}
+
+.mat-mdc-checkbox .mat-internal-form-field .mat-mdc-form-field .mdc-label {
+    --mdc-form-field-label-color: #e5e7eb;
+    --mat-checkbox-label-text-color: #e5e7eb;
+    --mat-sys-on-background: #e5e7eb!important;
+}
+
+.btn-checkbox {
+    --mdc-checkbox-selected-icon-color: #FFD700 !important;
+
+  .mdc-checkbox__checkmark {
+    color: #000000 !important;
+  }
+
+  .mdc-checkbox__mixedmark {
+    border-color: #000000 !important;
+    background: #FFD700 !important;
+  }
+
+  &.mat-mdc-checkbox-checked .mdc-checkbox__background,
+  &.mat-mdc-checkbox-indeterminate .mdc-checkbox__background {
+    border-color: #FFD700 !important;
+    background: #FFD700 !important;
+  }
+
+  .mdc-checkbox__native-control:indeterminate ~ .mdc-checkbox__background {
+    border-color: #FFD700 !important;
+    background-color: #FFD700 !important;
+  }
+}
+
+.dialog-panel {
+    .mat-mdc-dialog-container {
+        --mdc-dialog-container-color: #11151f;
+    }
+
+    .mat-mdc-dialog-content {
+        --mat-dialog-supporting-text-color: #e5e7eb!important;
+    }
+
+    .mat-mdc-dialog-surface {
+        background-color: #11151f;
+    }
+
+    .mat-mdc-dialog-title {
+        color: white!important;
+    }
+}

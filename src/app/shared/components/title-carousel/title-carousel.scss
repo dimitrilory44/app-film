@@ -1,0 +1,175 @@
+.carousel-wrapper {
+    padding: 20px 0 50px;
+}
+
+.swiper {
+    --swiper-navigation-color: white;
+}
+
+.swiper-slide {
+    width: 200px;
+    flex-shrink: 0;
+    transition: width 0.35s ease;
+
+    &:has(.netflix-card.is-hovered) {
+        width: 420px;
+    }
+}
+
+.netflix-card {
+    box-shadow: none !important; 
+    border: none !important;
+    outline: none !important;
+    display: flex;
+    height: 280px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #141414;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+
+    &.mat-mdc-card {
+        box-shadow: none !important;
+    }
+
+    &__poster {
+        width: 200px;
+        height: 100%;
+        object-fit: cover;
+        flex-shrink: 0;
+        display: block;
+    }
+
+    &__info {
+        width: 0;
+        opacity: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
+        color: white;
+        transition: width 0.35s ease, opacity 0.2s ease 0.15s, padding 0.35s ease;
+    }
+}
+
+.netflix-card.is-hovered .netflix-card__info {
+    width: 220px;
+    opacity: 1;
+    padding: 12px;
+    white-space: normal;
+}
+
+.netflix-card__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+.netflix-card__actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.match {
+    color: #46d369;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.btn-icon {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    color: white !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important; // évite que la line-height du bouton décale l'icône
+
+    ::ng-deep .mat-mdc-button-touch-target {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    // Le wrapper interne du contenu du bouton (icône) doit aussi être centré
+    ::ng-deep .mdc-button__label,
+    ::ng-deep .mat-mdc-button-persistent-ripple {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 18px; // force la hauteur de ligne à correspondre à la taille de l'icône
+    }
+
+    &:hover {
+        border-color: white !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    &--play {
+        background: white !important;
+        color: black !important;
+        border-color: white !important;
+    }
+
+    &--more {
+        margin-left: auto;
+    }
+}
+
+.btn-icon--play {
+    background: white !important;
+    color: black !important;
+    border-color: white !important;
+
+    // Neutralise l'overlay sombre par défaut de Material au survol
+    ::ng-deep .mat-mdc-button-persistent-ripple::before {
+        background-color: transparent !important;
+    }
+
+    &:hover {
+        background: #d32f2f !important; // ex: rouge Netflix au survol, ou toute couleur qui te plaît
+        color: white !important;
+        border-color: #d32f2f !important;
+        transform: scale(1.05);
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    // Neutralise aussi l'effet de ripple au clic si tu veux un rendu propre
+    ::ng-deep .mat-ripple-element {
+        display: none;
+    }
+}
+
+.btn-icon--play {
+    background: white !important;
+    color: black !important;
+    border-color: white !important;
+
+    ::ng-deep .mat-mdc-button-persistent-ripple::before {
+        background-color: transparent !important;
+    }
+
+    &:hover {
+        background: #e6e6e6 !important; 
+        color: black !important; 
+        border-color: #e6e6e6 !important;
+        transform: scale(1.05);
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+}

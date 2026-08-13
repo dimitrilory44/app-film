@@ -1,0 +1,21 @@
+<div class="title-grid">
+    @for (item of items(); track item.id) {
+        <div class="title-card">
+            <img mat-card-image [src]="item.poster_path | tmdbImage:'w185'" [alt]="getTitle(item)"/>
+        </div>
+    } 
+</div>
+
+@if (loading()) {
+    <div class="loading-indicator">
+        <mat-spinner diameter="32" />
+    </div>
+} @else if (items().length === 0) {
+    <div class="no-results">
+        <img mat-card-image src="assets/no_results.png" alt="Aucun titre trouvé" fill priority class="no-results-img" />
+    </div>
+}
+
+@if (items().length) {
+    <div #scrollAnchor class="scroll-anchor"></div>
+}
