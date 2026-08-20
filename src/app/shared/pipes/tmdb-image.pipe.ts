@@ -8,8 +8,12 @@ export type TmdbImageSize = 'w45' | 'w92' | 'w154' | 'w185' | 'w342' | 'w500' | 
   standalone: true,
 })
 export class TmdbImagePipe implements PipeTransform {
-  transform(path: string | null | undefined, size: TmdbImageSize = 'w500'): string {
-    if (!path) return 'assets/placeholder.png';
+  transform(
+    path: string | null | undefined, 
+    size: TmdbImageSize = 'w500',
+    fallback: string = 'assets/placeholder.png'
+  ): string {
+    if (!path) return fallback;
     return `${environment.tmdbImageBaseUrl}/${size}${path}`;
   }
 }

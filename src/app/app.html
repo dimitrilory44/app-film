@@ -1,2 +1,14 @@
+@if (!isOnline()) {
+  <div class="offline-banner">
+    Vous êtes hors ligne. Certaines fonctionnalités peuvent être indisponibles.
+  </div>
+}
+
+@if (isNavigating()) {
+  <loading-bar />
+}
+
 <title-header/>
-<router-outlet></router-outlet>
+<main>
+  <router-outlet></router-outlet>
+</main>

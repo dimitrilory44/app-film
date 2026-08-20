@@ -7,7 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProviderSettings } from '../provider-settings/provider-settings';
-import { TmdbApiService } from '@core/services/tmdb-api';
 
 @Component({
   selector: 'title-header',

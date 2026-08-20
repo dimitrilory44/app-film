@@ -1,15 +1,25 @@
-<title-filter [items]="titles()" [count]="totalResults()" [currentMediaType]="mediaType()"/>
+<title-filter [items]="titles()" [count]="totalResults()" [currentMediaType]="mediaType()" />
 
-<div class="container">
+<section class="container">
     @if (titles().length > 0) {
-        <title-list [items]="titles()" [loading]="loading()" (loadMore)="onLoadMore()"/>
-    } @else if (titlePopular.isLoading()) {
-        <mat-spinner diameter="32" />
-    } @else {
-        <img
-                mat-card-image
-                src="assets/no_results.png"
-                alt="Aucun film trouvé"
-            />
+    <title-list [items]="titles()" [loading]="loading()" (loadMore)="onLoadMore()" />
+
+    @if (loadMoreError()) {
+    <div class="state-message state-message--error">
+        <p class="state-message__hint">Impossible de charger plus d'éléments</p>
+        <button class="primary" (click)="onLoadMore()">Réessayer</button>
+    </div>
     }
-</div>
+    } @else if (hasError()) {
+    <div class="state-message state-message--error">
+        <img mat-card-image src="/assets/offline-illustration-white-ghost.svg" fill priority alt="Probleme reseau"
+            class="state-message__illustration" />
+        <h3 class="state-message__error">Vous êtes en mode hors connexion</h3>
+        <button class="primary" (click)="reload()">Réessayer</button>
+    </div>
+    } @else if (isLoadingInitial()) {
+    <mat-spinner diameter="32" />
+    } @else {
+    <img mat-card-image src="assets/no_results.png" alt="Aucun film trouvé" />
+    }
+</section>

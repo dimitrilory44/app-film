@@ -18,7 +18,7 @@ export class TitleListComponent {
   readonly scrollAnchor = viewChild.required<ElementRef>('scrollAnchor');
   readonly isFetching = signal(false);
 
-  protected readonly getTitle = getMediaTitle;
+  readonly getTitle = getMediaTitle;
 
   constructor() {
     effect(() => {

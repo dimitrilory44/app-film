@@ -1,0 +1,26 @@
+<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #1C2230; stroke: #2E3646; stroke-width: 1.5; }
+      .ghost { fill: #FFFFFF; }
+      .accent { stroke: #F5A623; stroke-width: 2; stroke-linecap: round; fill: none; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="1" y="1" width="58" height="58" rx="10"/>
+
+  <!-- mini fantôme, silhouette simplifiée -->
+  <path class="ghost" d="
+    M 20 40
+    C 20 24 24 16 30 16
+    C 36 16 40 24 40 40
+    L 40 42
+    C 37 39 34 43 31 40
+    C 28 43 25 39 22 42
+    C 21 41 20 41 20 40
+    Z"/>
+
+  <!-- yeux fermés -->
+  <path class="accent" d="M 25 27 Q 27 24 29 27"/>
+  <path class="accent" d="M 31 27 Q 33 24 35 27"/>
+</svg>

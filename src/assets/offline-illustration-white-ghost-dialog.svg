@@ -1,0 +1,69 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #11151f; }
+      .ghost-body { fill: #FFFFFF; stroke: #E2E8F0; stroke-width: 3; }
+      .cable { fill: none; stroke: #3A4354; stroke-width: 6; stroke-linecap: round; }
+      .spark { fill: #F5A623; }
+      .text-zzz { font-family: 'Comic Sans MS', 'Segoe UI', sans-serif; font-weight: bold; fill: #3A4354; }
+      .plug { fill: #4A5568; }
+      .glow { fill: #F5A623; opacity: 0.08; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="400" height="300" rx="16"/>
+
+  <!-- Soft ambient glow behind character -->
+  <circle class="glow" cx="200" cy="150" r="120"/>
+
+  <!-- Ground shadow -->
+  <ellipse cx="200" cy="255" rx="90" ry="12" fill="#000000" opacity="0.4"/>
+
+  <!-- Unplugged cable, left side -->
+  <path class="cable" d="M 40 200 Q 70 190 90 175"/>
+  <rect x="30" y="192" width="20" height="14" rx="3" class="plug"/>
+  <circle cx="32" cy="196" r="1.5" fill="#0D1117"/>
+  <circle cx="32" cy="202" r="1.5" fill="#0D1117"/>
+
+  <!-- Unplugged cable, right side -->
+  <path class="cable" d="M 300 175 Q 320 195 350 205"/>
+  <rect x="350" y="192" width="20" height="14" rx="3" class="plug"/>
+  <circle cx="368" cy="196" r="1.5" fill="#0D1117"/>
+  <circle cx="368" cy="202" r="1.5" fill="#0D1117"/>
+
+  <!-- Sparks where cables should connect but don't -->
+  <path class="spark" d="M 95 172 L 100 165 L 97 172 L 104 168 L 98 176 Z"/>
+  <path class="spark" d="M 297 172 L 302 166 L 299 173 L 306 169 L 300 177 Z"/>
+
+  <!-- Sleepy ghost / offline spirit character -->
+  <g transform="translate(200,150)">
+    <path class="ghost-body" d="
+      M -55 20
+      C -55 -35 -30 -60 0 -60
+      C 30 -60 55 -35 55 20
+      L 55 40
+      C 45 30 35 45 25 35
+      C 15 45 5 30 -5 40
+      C -15 30 -25 45 -35 35
+      C -45 45 -55 30 -55 40
+      Z"/>
+    <!-- closed sleepy eyes, orange accent -->
+    <path d="M -25 -5 Q -18 -12 -11 -5" stroke="#F5A623" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 11 -5 Q 18 -12 25 -5" stroke="#F5A623" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- small "hmph" mouth -->
+    <path d="M -8 12 Q 0 8 8 12" stroke="#F5A623" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Zzz -->
+  <text x="255" y="90" class="text-zzz" font-size="20">z</text>
+  <text x="268" y="75" class="text-zzz" font-size="16">z</text>
+  <text x="278" y="63" class="text-zzz" font-size="12">z</text>
+
+  <!-- Crossed-out wifi icon above, orange strike -->
+  <g transform="translate(200,55)" stroke="#3A4354" stroke-width="4" fill="none" stroke-linecap="round">
+    <path d="M -20 5 Q 0 -15 20 5"/>
+    <path d="M -10 12 Q 0 2 10 12"/>
+    <circle cx="0" cy="20" r="2.5" fill="#3A4354" stroke="none"/>
+    <line x1="-22" y1="-15" x2="22" y2="25" stroke="#F5A623" stroke-width="4"/>
+  </g>
+</svg>

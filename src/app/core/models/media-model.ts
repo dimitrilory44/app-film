@@ -1,17 +1,26 @@
+import { Signal } from "@angular/core";
+
+export interface ProvidersState<T> {
+  value: Signal<T | undefined>;
+  isLoading: Signal<boolean>;
+  error: Signal<Error | undefined>;
+  reload: () => void;
+}
+
 export interface TitleDiscover {
-    page: number;
-    results: Media[];
-    total_results: number;
+  page: number;
+  results: Media[];
+  total_results: number;
 }
 
 export interface Providers {
-    results: Provider[];
+  results: Provider[];
 }
 
 export interface Provider {
-    logo_path: string;
-    provider_name: string;
-    provider_id: number;
+  logo_path: string;
+  provider_name: string;
+  provider_id: number;
 }
 
 interface BaseMedia {
@@ -47,7 +56,7 @@ export function getMediaDate(media: Media): string {
 }
 
 export interface TitleCollection {
-    id: number;
-    description: string;
-    items: Media[];
+  id: number;
+  description: string;
+  items: Media[];
 }

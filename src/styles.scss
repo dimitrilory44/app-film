@@ -4,6 +4,8 @@
 @use 'swiper/css/navigation';
 @use 'swiper/css/pagination';
 
+@import 'material-icons/iconfont/material-icons.css';
+
 html {
   overflow-y: scroll;
   scrollbar-gutter: stable;
@@ -61,7 +63,12 @@ mat-divider {
 }
 
 .btn-checkbox {
-    --mdc-checkbox-selected-icon-color: #FFD700 !important;
+  --mdc-checkbox-selected-icon-color: #FFD700 !important;
+
+  &:disabled {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+  }
 
   .mdc-checkbox__checkmark {
     color: #000000 !important;

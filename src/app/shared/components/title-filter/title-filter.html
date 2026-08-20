@@ -1,41 +1,46 @@
 <div class="filter-items">
     <div class="filter-items__left">
-        <mat-button-toggle-group class="pill-toggle" [(value)]="selectedFilter" (change)="onFilterChange($event.value)" hideSingleSelectionIndicator>
-            <mat-button-toggle value="movies">Films</mat-button-toggle>
-            <mat-button-toggle value="series">Séries</mat-button-toggle>
+        <mat-button-toggle-group class="pill-toggle" [(value)]="selectedFilter" (change)="onFilterChange($event.value)"
+            hideSingleSelectionIndicator>
+            <mat-button-toggle value="all">Tout</mat-button-toggle>
+            <mat-button-toggle value="movie">Films</mat-button-toggle>
+            <mat-button-toggle value="tv">Séries</mat-button-toggle>
         </mat-button-toggle-group>
-    
+
         <span class="filter-items__count">{{ count() | number:'1.0-0' }} Titres</span>
     </div>
     <div class="filter-items__right">
-        <button class="platforms" aria-label="Plateformes disponibles" (click)="isPlatformsExpanded.set(!isPlatformsExpanded())">
-            @for(provider of selectedProviders(); track provider.provider_id) {
-                <span class="platforms__stack">
-                    <img [src]="provider.logo_path | tmdbImage:'w45'" [alt]="provider.provider_name" class="platforms__icon" />
-                </span>
-                <span class="platforms__badge">{{ selectedProvidersCount() | number:'1.0-0' }}</span>
-            }
+        <button class="platforms" aria-label="Plateformes disponibles"
+            (click)="isPlatformsExpanded.set(!isPlatformsExpanded())">
+            <div class="platforms__stack">
+                @for(provider of selectedProviders() | slice:0:5; track provider.provider_id) {
+                <img class="platforms__icon" [src]="provider.logo_path | tmdbImage:'w45':'assets/placeholder-icon.png'"
+                    [alt]="provider.provider_name" appImgFallback="assets/provider-fallback.svg"/>
+                }
+            </div>
+            <span class="platforms__badge">{{ selectedProvidersCount() | number:'1.0-0' }}</span>
         </button>
 
         <button mat-icon-button class="action-btn" aria-label="Trier" [matMenuTriggerFor]="menu">
             <mat-icon>sort</mat-icon>
         </button>
-        <button mat-stroked-button class="filter-btn" aria-label="Filtres" (click)="isFilterExpanded.set(!isFilterExpanded())">
+        <button mat-stroked-button class="filter-btn" aria-label="Filtres"
+            (click)="isFilterExpanded.set(!isFilterExpanded())">
             <mat-icon>filter_alt</mat-icon>
             Filtres
         </button>
     </div>
 </div>
 @if (isPlatformsExpanded()) {
-    <div class="filter-panel">
-        Contenu des plateformes...
-    </div>
+<div class="filter-panel">
+    Contenu des plateformes...
+</div>
 }
 
 @if (isFilterExpanded()) {
-    <div class="filter-panel">
-        Contenu des filtres...
-    </div>
+<div class="filter-panel">
+    Contenu des filtres...
+</div>
 }
 
 <mat-menu #menu="matMenu" class="filter-menu" [overlapTrigger]="false">

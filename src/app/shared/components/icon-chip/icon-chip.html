@@ -1,12 +1,10 @@
 <div class="icon-chip">
-  <img [src]="iconUrl()" [alt]="label()" class="icon-chip__image">
+  <img [src]="iconUrl()" [alt]="label()" class="icon-chip__image" appImgFallback="assets/provider-fallback.svg">
 
-  <button
-    class="icon-chip__remove"
-    type="button"
-    [attr.aria-label]="'Retirer ' + label"
-    (click)="onRemove($event)"
-  >
+  @if (removable()) {
+  <button class="icon-chip__remove" type="button" [attr.aria-label]="'Retirer ' + label()"
+    (click)="onRemove($event)">
     <mat-icon>remove</mat-icon>
   </button>
+  }
 </div>

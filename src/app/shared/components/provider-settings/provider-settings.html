@@ -1,43 +1,65 @@
+@if(providerResults().length > 0) {
 <h2 mat-dialog-title>Choisissez vos services de streaming</h2>
 
 <mat-dialog-content class="mat-typography dialog-content">
-  <div class="chip-list">
-      @for (provider of selectedProviders(); track provider.provider_id) {
-        <icon-chip
-          [iconUrl]="provider.logo_path | tmdbImage:'w45'"
-          [label]="provider.provider_name"
-          (removed)="removeProvider(provider.provider_id)"
-        ></icon-chip>
+  <div class="chip-list" appSwiper [config]="swiperConfig">
+    <div class="swiper-wrapper">
+
+      @for(provider of selectedProviders(); track provider.provider_id) {
+      <icon-chip class="swiper-slide" [iconUrl]="provider.logo_path | tmdbImage:'w45'" [label]="provider.provider_name" [removable]="isOnline()"
+        (removed)="removeProvider(provider.provider_id)"></icon-chip>
       }
+    </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-pagination"></div>
   </div>
+  @if(isOnline()) {
+  <div class="sub-search">
+    <mat-form-field appearance="outline">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [formControl]="searchControl" placeholder="Recherche une plateforme">
+    </mat-form-field>
+  </div>
+  }
   <div class="sub-list">
     <div class="sub-name">
       <h3 class="sub-title">Abonnement </h3>
       <span>{{ countProvidersSelected() | number:'1.0-0' }} service(s) de streaming selectionnés</span>
     </div>
-    <mat-checkbox 
-      class="btn-checkbox"
-      [indeterminate]="partiallyComplete()"
-    ></mat-checkbox>
-  </div>
-  <section class="provider-container">
-    @if (providers.hasValue()) {
-        @for (provider of providers.value().results; track provider.provider_id) {
-            <div class="provider-items">
-                <div class="provider-info">
-                    <img mat-card-image class="provider-logo" [src]="provider.logo_path | tmdbImage:'w45'" [alt]="provider.provider_name"/>
-                    <span class="provider-name">{{ provider.provider_name }}</span>
-                </div>
-                <mat-checkbox 
-                    class="btn-checkbox"
-                    [checked]="isSelected(provider.provider_id)"
-                    (change)="toggleProvider(provider.provider_id, provider.provider_name, provider.logo_path)"
-                ></mat-checkbox>
-            </div>
-        }
+    @if(isOnline()) {
+    <mat-checkbox class="btn-checkbox" [checked]="areAllProvidersSelected()" [indeterminate]="partiallyComplete()"
+    (change)="toggleAllProviders()"></mat-checkbox>
     }
-  </section>
+  </div>
+
+  @if(isOnline()) {
+  <div class="provider-container">
+    @for(provider of filteredProviders(); track provider.provider_id) {
+    <div class="provider-items">
+      <div class="provider-info">
+        <img mat-card-image class="provider-logo" [src]="provider.logo_path | tmdbImage:'w45'"
+          [alt]="provider.provider_name" appImgFallback="assets/provider-fallback.svg"/>
+        <span class="provider-name">{{ provider.provider_name }}</span>
+      </div>
+      <mat-checkbox class="btn-checkbox" [checked]="isSelected(provider.provider_id)"
+          (change)="toggleProvider(provider)"></mat-checkbox>
+    </div>
+    } @empty {
+      <p class="no-result">Aucune plateforme trouvée</p>
+    }
+  </div>
+  }
 </mat-dialog-content>
-  <mat-dialog-actions class="dialog-actions">
+<mat-dialog-actions class="dialog-actions">
   <button class="dialog-action primary rounded" [mat-dialog-close]="true" (click)="save()">Terminé</button>
 </mat-dialog-actions>
+} @else if(isLoadingInitial()) {
+  <loading-bar />
+} @else if(hasError()) {
+  <div class="state-message state-message--error">
+    <img src="/assets/offline-illustration-white-ghost-dialog.svg" alt="" class="state-message__illustration" />
+    <h3 class="state-message__error">Vous êtes en mode hors connexion</h3>
+    <button class="primary" (click)="reload()">Réessayer</button>
+  </div>
+}

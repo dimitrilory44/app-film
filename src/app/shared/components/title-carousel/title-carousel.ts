@@ -16,7 +16,7 @@ export class TitleCarouselComponent {
   readonly items = input<Media[]>([]);
   
   readonly hoveredMovieId = signal<number | null>(null);
-  protected readonly getTitle = getMediaTitle;
+  readonly getTitle = getMediaTitle;
 
   readonly swiperConfig = {
     slidesPerView: 'auto' as const,

@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Provider } from '@core/models/media-model';
 
 @Injectable({
@@ -8,8 +8,9 @@ export class UserPreferencesService {
   readonly STORAGE_KEY = 'selectedProviders';
 
   readonly selectedProviders = signal<Provider[]>(this.loadFromStorage());
+  readonly selectedProvidersIds = computed(() => this.selectedProviders().map(sp => sp.provider_id).join('|'));
 
-  private loadFromStorage(): Provider[] {
+  loadFromStorage(): Provider[] {
     const raw = localStorage.getItem(this.STORAGE_KEY);
     return raw ? JSON.parse(raw) as Provider[] : [];
   }

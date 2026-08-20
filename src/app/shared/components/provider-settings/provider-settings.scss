@@ -1,3 +1,25 @@
+.swiper {
+    --swiper-navigation-color: white;
+}
+
+.swiper-slide {
+    width: 50px;
+    flex-shrink: 0;
+    transition: width 0.35s ease;
+}
+
+.swiper-button-prev {
+    top: 96px;
+    --swiper-navigation-size: 20px;
+    --swiper-theme-color: white;
+}
+
+.swiper-button-next {
+    top: 93px;
+    --swiper-navigation-size: 20px;
+    --swiper-theme-color: white;
+}
+
 .dialog-content {
   display: flex;
   flex-direction: column;
@@ -48,12 +70,61 @@
   border-radius: 5px;
 }
 
+.state-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 48px 16px;
+  text-align: center;
+
+  &__error {
+    color: #d85a30;
+  }
+
+  &__hint {
+    font-size: 13px;
+    color: #888780;
+    margin: 0;
+  }
+
+  &__illustration {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  button {
+    margin-top: 8px;
+    padding: 8px 16px;
+
+    background-color: #2a2f38;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+  }
+
+  .primary {
+    background-color: #fbc500!important;
+    color: #000!important;
+    font-weight: 700;
+    border: none;
+  }
+
+}
+
 .primary {
     background-color: #fbc500!important;
     color: #000!important;
     font-weight: 700;
     border: none;
-}
+  }
 
 .rounded {
     border-radius: 18px;
@@ -91,4 +162,29 @@
     margin-top: 0;
     padding: 10px;
     width: 100%;
+}
+
+.sub-search {
+    margin-bottom: 20px; 
+    min-width: 0;     
+    max-width: none;
+
+    mat-form-field {
+        width: 100%;
+    }
+
+    ::ng-deep .mat-mdc-text-field-wrapper {
+        height: 40px;
+    }
+
+    ::ng-deep .mat-mdc-form-field-infix {
+        min-height: unset;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    ::ng-deep .mat-mdc-form-field-icon-prefix,
+    ::ng-deep .mat-mdc-form-field-icon-suffix {
+        padding: 0 4px;
+    }
 }
