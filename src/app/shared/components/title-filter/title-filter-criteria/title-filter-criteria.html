@@ -1,0 +1,43 @@
+<div class="filter-panel">
+    <div class="filter-panel__header">
+        <span [class.is-active]="isSelectedGenres()">Genres</span>
+        <button 
+            mat-icon-button 
+            class="filter-trigger"
+            [matMenuTriggerFor]="genresMenu"
+            (menuOpened)="onGenresMenuOpened()"
+            (menuClosed)="onGenresMenuClosed()" 
+        >
+        @if (isOpened()) {
+            <mat-icon [class.is-active]="isSelectedGenres()">expand_less</mat-icon>
+        } @else {
+            <mat-icon [class.is-active]="isSelectedGenres()">expand_more</mat-icon>
+        }
+        </button>
+    </div>
+
+    <mat-menu #genresMenu="matMenu" class="genres-menu" [overlapTrigger]="false" yPosition="below">
+        <div class="genres-panel" (click)="$event.stopPropagation()">
+            <div class="genres-panel__header">
+                <span class="genres-panel__title">Genres</span>
+                <button 
+                    class="genres-panel__reset"
+                    (click)="reset()">
+                    <mat-icon>close</mat-icon>
+                    Réinitialiser
+                </button>
+            </div>
+
+            <div class="genres-panel__grid">
+                @for (genre of allGenres(); track genre.id) {
+                    <mat-checkbox 
+                        class="btn-checkbox"
+                        [checked]="isSelected(genre.id)"
+                        (change)="toggleGenre(genre)"
+                        (click)="$event.stopPropagation()">
+                        {{ genre.name }}</mat-checkbox>
+                }
+            </div>
+        </div>
+    </mat-menu>
+</div>

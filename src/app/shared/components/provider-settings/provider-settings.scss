@@ -70,58 +70,9 @@
   border-radius: 5px;
 }
 
-.state-message {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-
-  padding: 48px 16px;
-  text-align: center;
-
-  &__error {
-    color: #d85a30;
-  }
-
-  &__hint {
-    font-size: 13px;
-    color: #888780;
-    margin: 0;
-  }
-
-  &__illustration {
-    width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-  }
-
-  button {
-    margin-top: 8px;
-    padding: 8px 16px;
-
-    background-color: #2a2f38;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-
-    cursor: pointer;
-
-  }
-
-  .primary {
-    background-color: #fbc500!important;
-    color: #000!important;
-    font-weight: 700;
-    border: none;
-  }
-
-}
-
 .primary {
-    background-color: #fbc500!important;
-    color: #000!important;
+    background-color: #fbc500;
+    color: #000;
     font-weight: 700;
     border: none;
   }
@@ -162,6 +113,11 @@
     margin-top: 0;
     padding: 10px;
     width: 100%;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 }
 
 .sub-search {

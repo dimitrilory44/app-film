@@ -108,3 +108,27 @@ mat-divider {
         color: white!important;
     }
 }
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+}
+
+.mat-mdc-menu-panel {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 5) !important;
+  max-width: 400px!important;
+}
+
+.mat-mdc-menu-content {
+  padding: 0!important;
+  overflow: hidden;
+}
+
+.mat-mdc-outlined-button:not(:disabled) {
+    --mat-button-outlined-label-text-color: #e5e7eb!important;
+    --mat-button-outlined-outline-color: transparent;
+}

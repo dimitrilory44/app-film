@@ -1,4 +1,4 @@
-import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
+import { Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TmdbApiService } from '@core/services/tmdb-api';
@@ -16,14 +16,14 @@ import { SwiperDirective } from '@shared/directives/swiper.directive';
 import { Provider } from '@core/models/media-model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ImgFallbackDirective } from '@shared/directives/img-fallback.directive';
-import { LoadingBar } from '../loading-bar/loading-bar';
 import { OnlineStatusService } from '@core/services/online-status.service';
 import { MatInputModule } from '@angular/material/input';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { StateMessage } from "../state-message/state-message";
 
 @Component({
   selector: 'app-provider-settings',
-  imports: [TmdbImagePipe, MatDialogModule, MatButtonModule, MatChipsModule, MatIconModule, MatCheckboxModule, MatFormFieldModule, FormsModule, ReactiveFormsModule, IconChipComponent, DecimalPipe, SwiperDirective, MatProgressSpinnerModule, ImgFallbackDirective, LoadingBar, MatInputModule],
+  imports: [TmdbImagePipe, MatDialogModule, MatButtonModule, MatChipsModule, MatIconModule, MatCheckboxModule, MatFormFieldModule, FormsModule, ReactiveFormsModule, IconChipComponent, DecimalPipe, SwiperDirective, MatProgressSpinnerModule, ImgFallbackDirective, MatInputModule, StateMessage],
   templateUrl: './provider-settings.html',
   styleUrl: './provider-settings.scss',
 })
@@ -36,45 +36,54 @@ export class ProviderSettings {
   readonly isOnline = this.#onlineStatus.isOnline;
   readonly mediaType = this.#tmdbApiService.mediaType;
 
-  readonly providersMovies = this.#tmdbApiService.getProviders(signal('movie'));
-  readonly providersSeries = this.#tmdbApiService.getProviders(signal('tv'));
+  readonly providersMovies = this.#tmdbApiService.getProvidersByMedia(signal('movie'));
+  readonly providersSeries = this.#tmdbApiService.getProvidersByMedia(signal('tv'));
 
-  readonly providerResults = computed(() => {
-    return (this.providersMovies.value()?.results ?? []) || (this.providersMovies.value()?.results ?? []);
-  });
-  readonly searchControl = new FormControl('', { nonNullable: true });
-  readonly searchTerm = toSignal(this.searchControl.valueChanges,{ initialValue: '' });
+  searchControl = new FormControl('', { nonNullable: true });
+  readonly searchTerm = toSignal(this.searchControl.valueChanges, { initialValue: '' });
 
-  readonly selectedProviders = linkedSignal(() => this.#userPreferencesService.selectedProviders());
+  readonly selectedProviders = linkedSignal<Provider[]>(() => this.#userPreferencesService.selectedProviders());
   readonly countProvidersSelected = computed(() => this.selectedProviders().length);
+  readonly hasSelectionProviders = computed(() => this.selectedProviders().length > 0);
+  readonly actionsClose = computed(() => this.hasSelectionProviders() ? 'Terminé' : 'Veuillez sélectionner au moins 1 service');
 
-  readonly areAllProvidersSelected = computed(() => {
-    const response = this.providerResults();
+  readonly areAllProvidersSelected = computed<boolean>(() => {
+    const response = this.allProviders();
     if (response.length === 0) return false;
     return response.every(p => this.selectedProviders().some(sp => sp.provider_id === p.provider_id));
   });
 
-  readonly partiallyComplete = computed(() => {
+  readonly partiallyComplete = computed<boolean>(() => {
     return this.selectedProviders().length > 0 && !this.areAllProvidersSelected();
   });
 
-  readonly filteredProviders = computed(() => {
+  readonly allProviders = computed<Provider[]>(() => {
+    const providersMoviesResults = this.providersMovies.value()?.results ?? [];
+    const providersSeriesResults = this.providersSeries.value()?.results ?? [];
+
+    return Array.from(
+      new Map(
+        [...providersMoviesResults, ...providersSeriesResults].map(provider => [
+          provider.provider_id,
+          provider
+        ])
+      ).values()
+    );
+  });
+
+  readonly filteredProviders = computed<Provider[]>(() => {
     const term = this.searchTerm().toLowerCase();
-    const data = this.providersMovies.value() || this.providersSeries.value();
+    const data = this.allProviders();
     if (!data) return [];
-    return data.results.filter(p => p.provider_name.toLowerCase().includes(term));
+    return data.filter(p => p.provider_name.toLowerCase().includes(term));
   });
 
   readonly hasError = computed(() => {
-    const type = this.mediaType();
-    if (type === 'all') return this.providersMovies.error() || this.providersSeries.error();
-    return type === 'movie' ? this.providersMovies.error() : this.providersSeries.error();
+    return this.providersMovies.error() || this.providersSeries.error();
   });
 
   readonly isLoadingInitial = computed(() => {
-    const type = this.mediaType();
-    if (type === 'all') return this.providersMovies.isLoading() || this.providersSeries.isLoading();
-    return type === 'movie' ? this.providersMovies.isLoading() : this.providersSeries.isLoading();
+    return this.providersMovies.isLoading() || this.providersSeries.isLoading();
   });
 
   readonly swiperConfig = {
@@ -87,6 +96,9 @@ export class ProviderSettings {
   };
 
   constructor() {
+    effect(() => {
+      this.#dialogRef.disableClose = !this.hasSelectionProviders();
+    })
     this.#dialogRef.beforeClosed().subscribe(() => {
       this.#userPreferencesService.setSelectedProviders(this.selectedProviders());
     });
@@ -102,24 +114,28 @@ export class ProviderSettings {
     const updated = exists
       ? current.filter(p => p.provider_id !== provider.provider_id)
       : [...current, provider];
-    this.selectedProviders.set(updated.sort((a, b) => a.provider_id - b.provider_id));
+    this.selectedProviders.set(this.sortById(updated));
   }
 
   toggleAllProviders(): void {
-    const response = this.providerResults();
+    const response = this.allProviders();
     if (response.length === 0) return;
-    this.selectedProviders.set(this.areAllProvidersSelected() ? [] : response);
+    this.selectedProviders.set(this.areAllProvidersSelected() ? [] : this.sortById(response));
   }
 
   removeProvider(id: number): void {
     this.selectedProviders.set(this.selectedProviders().filter(p => p.provider_id !== id));
   }
 
-  save(): void {
-    this.#dialogRef.close();
+  sortById<T extends { provider_id: number }>(items: T[]): T[] {
+    return [...items].sort((a, b) => a.provider_id - b.provider_id);
   }
 
-  reload(): void {
+  cleanInput(): void {
+    this.searchControl.setValue('');
+  }
+
+  onRetry(): void {
     const type = this.mediaType();
     if (type === 'all' || type === 'movie') this.providersMovies.reload();
     if (type === 'all' || type === 'tv') this.providersSeries.reload();

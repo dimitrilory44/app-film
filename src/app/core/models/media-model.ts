@@ -1,5 +1,10 @@
 import { Signal } from "@angular/core";
 
+export interface UserPreferences {
+  selectedProviders?: Provider[];
+  selectedTitlesGenre?: Genre[];
+}
+
 export interface ProvidersState<T> {
   value: Signal<T | undefined>;
   isLoading: Signal<boolean>;
@@ -13,14 +18,35 @@ export interface TitleDiscover {
   total_results: number;
 }
 
+export interface GenreList {
+  genres: Genre[];
+}
+
+export interface ProvidersApi {
+  results: ProviderApi[];
+}
+
 export interface Providers {
   results: Provider[];
 }
 
-export interface Provider {
-  logo_path: string;
-  provider_name: string;
+interface ProviderApi {
   provider_id: number;
+  provider_name: string;
+  logo_path: string;
+  display_priority: number;
+  display_priorities: Record<string, number>;
+}
+
+export interface Provider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
 }
 
 interface BaseMedia {

@@ -1,0 +1,40 @@
+<svg width="320" height="280" viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Aucune série trouvée</title>
+  <desc>Illustration d'une loupe entourée d'ecrans de television vides, sur fond sombre</desc>
+
+  <rect width="320" height="280" fill="#0d1117" rx="16"/>
+
+  <!-- ecran tv, arriere-plan gauche -->
+  <g transform="translate(58,152)">
+    <rect x="0" y="0" width="50" height="38" rx="6" fill="#171c26" stroke="#2a3140" stroke-width="1.5"/>
+    <line x1="17" y1="38" x2="17" y2="46" stroke="#2a3140" stroke-width="2"/>
+    <line x1="33" y1="38" x2="33" y2="46" stroke="#2a3140" stroke-width="2"/>
+    <line x1="10" y1="46" x2="40" y2="46" stroke="#2a3140" stroke-width="2" stroke-linecap="round"/>
+    <path d="M18 12 L32 19 L18 26 Z" fill="#333d54"/>
+  </g>
+
+  <!-- ecran tv, arriere-plan droit -->
+  <g transform="translate(212,152)">
+    <rect x="0" y="0" width="50" height="38" rx="6" fill="#171c26" stroke="#2a3140" stroke-width="1.5"/>
+    <line x1="17" y1="38" x2="17" y2="46" stroke="#2a3140" stroke-width="2"/>
+    <line x1="33" y1="38" x2="33" y2="46" stroke="#2a3140" stroke-width="2"/>
+    <line x1="10" y1="46" x2="40" y2="46" stroke="#2a3140" stroke-width="2" stroke-linecap="round"/>
+    <path d="M18 12 L32 19 L18 26 Z" fill="#333d54"/>
+  </g>
+
+  <!-- ecran tv, centre, sous la loupe -->
+  <g transform="translate(133,144)">
+    <rect x="0" y="0" width="54" height="42" rx="6" fill="#1a212f" stroke="#333d54" stroke-width="1.5"/>
+    <line x1="19" y1="42" x2="19" y2="51" stroke="#333d54" stroke-width="2"/>
+    <line x1="35" y1="42" x2="35" y2="51" stroke="#333d54" stroke-width="2"/>
+    <line x1="11" y1="51" x2="43" y2="51" stroke="#333d54" stroke-width="2" stroke-linecap="round"/>
+    <path d="M20 13 L36 21 L20 29 Z" fill="#454f6c"/>
+  </g>
+
+  <!-- loupe, premier plan -->
+  <circle cx="160" cy="100" r="42" fill="#10141d" stroke="#556080" stroke-width="4"/>
+  <circle cx="160" cy="100" r="30" fill="none" stroke="#333d55" stroke-width="1.5"/>
+  <line x1="190" y1="130" x2="222" y2="162" stroke="#556080" stroke-width="6" stroke-linecap="round"/>
+
+  <path d="M144 100 Q160 88 176 100" fill="none" stroke="#7d87ac" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+</svg>

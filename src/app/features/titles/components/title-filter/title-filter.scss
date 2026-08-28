@@ -132,6 +132,31 @@
   }
 }
 
+.filters {
+  &__badge {
+    position: absolute;
+    top: -13px;
+    right: -19px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 18px;
+    height: 18px;
+
+    background-color: #f2a93b;
+    color: #14181f;
+
+    border-radius: 50%;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    z-index: 10;
+  }
+}
+
 .action-btn {
   background-color: #2a2f38;
   border-radius: 20px;
@@ -146,11 +171,24 @@
   }
 }
 
+.action-btn__platforms {
+  background-color: #11151f;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.icon-plus {
+  border: 1px solid hsla(0, 0%, 100%, .1); 
+  border-radius: 5px; 
+  width: 40px; 
+  height: 40px;
+} 
+
 .filter-btn {
   background-color: #2a2f38 !important;
   border-radius: 20px !important;
   border: none !important;
-  color: #e5e7eb !important;
+  color: #e5e7eb;
   height: 36px;
   display: flex;
   align-items: center;
@@ -166,11 +204,104 @@
 .filter-panel {
   color: #e5e7eb;
   background: #11151f;
+  display: flex;
   padding: 15px 64px;
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e5e7eb;
+  }
 }
 
 .filter-menu {
   --mat-menu-container-color: #11151f;
   --mat-menu-item-label-text-color: #e5e7eb;
+}
 
+.swiper {
+    --swiper-navigation-color: white;
+}
+
+.swiper-slide {
+    width: 50px;
+    flex-shrink: 0;
+    transition: width 0.35s ease;
+}
+
+.swiper-button-prev {
+    top: 187px;
+    left: 462px;
+    --swiper-navigation-size: 20px;
+    --swiper-theme-color: white;
+}
+
+.swiper-button-next {
+    top: 188px;
+    right: 110px;
+    --swiper-navigation-size: 20px;
+    --swiper-theme-color: white;
+}
+
+.filter-group {
+  width: 10%;
+  display: flex;
+}
+
+.filter-chip {
+  display: flex;
+  background-color: #262b38;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px;
+  white-space: nowrap;
+  color: #fbc500;
+  border-radius: 100px;
+}
+
+.filter-providers {
+  width: 90%;
+  overflow: hidden;
+}
+
+.genres-panel {
+  padding: 10px;
+  background: #11151f;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  &__reset {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: #f5c518; // jaune vu sur ta capture
+    cursor: pointer;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.mat-mdc-icon-button {
+  --mat-icon-button-icon-color: white;
+}
+
+.is-active {
+  color: #f5c518;
 }

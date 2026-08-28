@@ -14,7 +14,7 @@ export const routes: Routes = [
             {
                 path: 'all', 
                 loadComponent: () => 
-                    import('@features/pages/popular-titles/popular-titles')
+                    import('@features/titles/popular-titles/popular-titles')
                         .then(m => m.PopularTitlesComponent),
                 title: 'Films et series en streaming',
                 data: { mediaType: 'all' }
@@ -22,7 +22,7 @@ export const routes: Routes = [
             {
                 path: 'movies', 
                 loadComponent: () => 
-                    import('@features/pages/popular-titles/popular-titles')
+                    import('@features/titles/popular-titles/popular-titles')
                         .then(m => m.PopularTitlesComponent),
                 title: 'Films populaires en streaming',
                 data: { mediaType: 'movie' }
@@ -30,7 +30,7 @@ export const routes: Routes = [
             {
                 path: 'series',
                 loadComponent: () =>
-                    import('@features/pages/popular-titles/popular-titles')
+                    import('@features/titles/popular-titles/popular-titles')
                         .then(m => m.PopularTitlesComponent),
                 title: 'Séries populaires en streaming',
                 data: { mediaType: 'tv' }

@@ -1,14 +1,15 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
-import { TitleFilterComponent } from '@shared/components/title-filter/title-filter';
-import { TitleListComponent } from '@shared/components/title-list/title-list';
+import { TitleFilterComponent } from '@features/titles/components/title-filter/title-filter';
+import { TitleListComponent } from '@features/titles/components/title-list/title-list';
 import { TmdbApiService } from '@core/services/tmdb-api';
 import { Media, MovieMedia, SeriesMedia } from '@core/models/media-model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserPreferencesService } from '@core/services/user-preferences-service';
+import { StateMessage } from "@shared/components/state-message/state-message";
 
 @Component({
   selector: 'popular-page',
-  imports: [TitleFilterComponent, TitleListComponent, MatProgressSpinnerModule],
+  imports: [TitleFilterComponent, TitleListComponent, MatProgressSpinnerModule, StateMessage],
   templateUrl: './popular-titles.html',
   styleUrl: './popular-titles.scss',
 })
@@ -19,10 +20,11 @@ export class PopularTitlesComponent {
   readonly mediaType = input.required<'all' | 'movie' | 'tv'>();
   readonly titles = signal<Media[]>([]);
   readonly currentPage = signal(1);
-  readonly loading = signal(false);
+  readonly isLoadingMore = signal(false);
   readonly loadMoreError = signal(false);
 
   readonly selectedProviderIds = this.#userPreferencesService.selectedProvidersIds;
+  readonly selectedGenresIds = this.#userPreferencesService.selectedTitlesGenreIds;
 
   readonly moviesPopular = this.#tmdbApiService.getPopularByMedia(signal('movie'), this.currentPage);
   readonly seriesPopular = this.#tmdbApiService.getPopularByMedia(signal('tv'), this.currentPage);
@@ -42,35 +44,32 @@ export class PopularTitlesComponent {
   readonly results = computed(() => {
     const type = this.mediaType();
     if (type === 'all') return this.allPopular();
-    if (this.moviesPopular.error() || this.seriesPopular.error()) return [];
+    if (this.hasError()) return [];
     const response = type === 'movie' ? this.moviesPopular.value() : this.seriesPopular.value();
     if (!response) return [];
     return response.results.map(item => ({ ...item, media_type: this.mediaType() })) as Media[];
   });
 
   readonly totalResults = computed(() => {
-    const type = this.mediaType();
-    const totalMedia = (this.moviesPopular.value()?.total_results ?? 0) + (this.seriesPopular.value()?.total_results ?? 0);
-    if (type === 'all') return totalMedia;
-    if (this.moviesPopular.error() || this.seriesPopular.error()) return 0;
-    return type === 'movie' ? (this.moviesPopular.value()?.total_results ?? 0) : (this.seriesPopular.value()?.total_results ?? 0);
+    if (this.hasError()) return 0;
+    return this.pick(
+      this.moviesPopular.value()?.total_results ?? 0,
+      this.seriesPopular.value()?.total_results ?? 0,
+      (this.moviesPopular.value()?.total_results ?? 0) + (this.seriesPopular.value()?.total_results ?? 0)
+    );
   });
 
   readonly hasError = computed(() => {
-    const type = this.mediaType();
-    if (type === 'all') return this.moviesPopular.error() || this.seriesPopular.error();
-    return type === 'movie' ? this.moviesPopular.error() : this.seriesPopular.error();
+    return this.pick(!!this.moviesPopular.error(), !!this.seriesPopular.error(), !!(this.moviesPopular.error() || this.seriesPopular.error()))
   });
 
-  readonly isLoadingInitial = computed(() => {
-    const type = this.mediaType();
-    if (type === 'all') return this.moviesPopular.isLoading() || this.seriesPopular.isLoading();
-    return type === 'movie' ? this.moviesPopular.isLoading() : this.seriesPopular.isLoading();
+  readonly isInitialLoading = computed(() => {
+    return this.pick(this.moviesPopular.isLoading(), this.seriesPopular.isLoading(), this.moviesPopular.isLoading() || this.seriesPopular.isLoading());;
   });
 
   constructor() {
     effect(() => {
-      this.#tmdbApiService.mediaType.set(this.mediaType());
+      this.selectedGenresIds();
       this.selectedProviderIds();
       this.titles.set([]);
       this.currentPage.set(1);
@@ -78,25 +77,15 @@ export class PopularTitlesComponent {
     });
 
     effect(() => {
-      const isAll = this.mediaType() === 'all';
-
-      const hasError = isAll
-        ? this.moviesPopular.error() || this.seriesPopular.error()
-        : this.mediaType() === 'movie' ? this.moviesPopular.error() : this.seriesPopular.error();
-
-      if (hasError) {
-        this.loading.set(false);
+      if (this.hasError()) {
+        this.isLoadingMore.set(false);
         if (this.titles().length > 0) {
           this.loadMoreError.set(true);
         }
         return;
       }
-
-      const isReady = isAll
-        ? !this.moviesPopular.isLoading() && !this.seriesPopular.isLoading()
-        : this.mediaType() === 'movie' ? !this.moviesPopular.isLoading() : !this.seriesPopular.isLoading();
-
-      if (!isReady) return;
+ 
+      if (this.isInitialLoading()) return;
 
       this.loadMoreError.set(false);
 
@@ -105,19 +94,25 @@ export class PopularTitlesComponent {
         const newItems = this.results().filter(item => !existingIds.has(item.id));
         return [...titles, ...newItems];
       });
-      this.loading.set(false);
+      this.isLoadingMore.set(false);
     });
   }
 
   onLoadMore(): void {
-    this.loading.set(true);
+    this.isLoadingMore.set(true);
     this.loadMoreError.set(false);
     this.currentPage.update(p => p + 1);
   }
 
-  reload(): void {
+  onRetry(): void {
     const type = this.mediaType();
     if (type === 'all' || type === 'movie') this.moviesPopular.reload();
     if (type === 'all' || type === 'tv') this.seriesPopular.reload();
+  }
+
+  pick<T>(movieVal: T, tvVal: T, allVal: T): T {
+    const type = this.mediaType();
+    if (type === 'all') return allVal;
+    return type === 'movie' ? movieVal : tvVal;
   }
 }

@@ -1,0 +1,27 @@
+<svg width="320" height="280" viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Aucun résultat de recherche de provider</title>
+  <desc>Illustration d'une loupe entourée de trois cartes vides, sur fond sombre</desc>
+
+  <rect width="320" height="280" fill="#11151f" rx="16"/>
+
+  <!-- cartes provider vides, en arriere-plan -->
+  <rect x="70" y="150" width="46" height="46" rx="10" fill="#1b2130" stroke="#2a3145" stroke-width="1.5"/>
+  <rect x="137" y="140" width="46" height="46" rx="10" fill="#1e2536" stroke="#2f3750" stroke-width="1.5"/>
+  <rect x="204" y="150" width="46" height="46" rx="10" fill="#1b2130" stroke="#2a3145" stroke-width="1.5"/>
+
+  <line x1="83" y1="167" x2="103" y2="179" stroke="#3a4258" stroke-width="2" stroke-linecap="round"/>
+  <line x1="103" y1="167" x2="83" y2="179" stroke="#3a4258" stroke-width="2" stroke-linecap="round"/>
+
+  <line x1="150" y1="157" x2="170" y2="169" stroke="#414a66" stroke-width="2" stroke-linecap="round"/>
+  <line x1="170" y1="157" x2="150" y2="169" stroke="#414a66" stroke-width="2" stroke-linecap="round"/>
+
+  <line x1="217" y1="167" x2="237" y2="179" stroke="#3a4258" stroke-width="2" stroke-linecap="round"/>
+  <line x1="237" y1="167" x2="217" y2="179" stroke="#3a4258" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- loupe, au premier plan -->
+  <circle cx="160" cy="108" r="42" fill="#171d2c" stroke="#5b6b93" stroke-width="4"/>
+  <circle cx="160" cy="108" r="30" fill="none" stroke="#3a4460" stroke-width="1.5"/>
+  <line x1="190" y1="138" x2="222" y2="170" stroke="#5b6b93" stroke-width="6" stroke-linecap="round"/>
+
+  <path d="M144 108 Q160 96 176 108" fill="none" stroke="#8b93b8" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+</svg>

@@ -1,0 +1,38 @@
+<title-filter [items]="titles()" [count]="totalResults()" [currentMediaType]="mediaType()" />
+
+<section class="container">
+    @if (titles().length > 0) {
+    <title-list 
+        [items]="titles()" 
+        [loading]="isLoadingMore()" 
+        (loadMore)="onLoadMore()" 
+    />
+    
+        @if (loadMoreError()) {
+        <state-message
+            hint="Impossible de charger plus d'éléments"
+            (retry)="onLoadMore()"
+        />
+        }
+
+    } @else if (isInitialLoading()) {
+    <div class="loading-indicator">
+        <mat-spinner diameter="32" />
+    </div>
+
+    } @else if (hasError()) {
+    <state-message
+        illustration="/assets/offline-illustration-white-ghost.svg"
+        title="Vous êtes en mode hors connexion"
+        (retry)="onRetry()"
+    />
+
+    } @else {
+    <state-message 
+        illustration="assets/no_series_results.svg" 
+        hint="Aucun films ou series trouvé" 
+        [showRetry]="false"
+        />
+    }
+
+</section>

@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { ProviderSettings } from '../provider-settings/provider-settings';
 
 @Component({
   selector: 'title-header',
@@ -25,17 +24,5 @@ export class TitleHeaderComponent {
     { label: 'Populaires', path: '/popular', exact: false },
     { label: 'Listes', path: null, exact: false }
   ];
-
-  openDialog() {
-    const dialogRef = this.dialog.open(ProviderSettings, {
-      panelClass: 'dialog-panel',
-      width: '600px',
-      height: '600px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
 
 }

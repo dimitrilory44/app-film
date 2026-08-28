@@ -1,0 +1,85 @@
+.filter-panel {
+  color: #e5e7eb;
+  background: #11151f;
+  display: flex;
+  padding: 15px 64px;
+
+  &__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e5e7eb;
+  }
+}
+
+.filter-group {
+  width: 10%;
+  display: flex;
+}
+
+.filter-chip {
+  display: flex;
+  background-color: #262b38;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px;
+  white-space: nowrap;
+  color: #fbc500;
+  border-radius: 100px;
+}
+
+.action-btn {
+  background-color: #2a2f38;
+  border-radius: 20px;
+  width: 36px;
+  height: 36px;
+
+  mat-icon {
+    color: #e5e7eb;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.action-btn__platforms {
+  background-color: #11151f;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.icon-plus {
+  border: 1px solid hsla(0, 0%, 100%, .1); 
+  border-radius: 5px; 
+  width: 40px; 
+  height: 40px;
+} 
+
+.filter-providers {
+  width: 90%;
+  overflow: hidden;
+}
+
+.swiper {
+    --swiper-navigation-color: white;
+}
+
+.swiper-slide {
+    width: 50px;
+    flex-shrink: 0;
+    transition: width 0.35s ease;
+}
+
+.swiper-button-prev {
+    top: 187px;
+    left: 462px;
+    --swiper-navigation-size: 20px;
+    --swiper-theme-color: white;
+}
+
+.swiper-button-next {
+    top: 188px;
+    right: 110px;
+    --swiper-navigation-size: 20px;
+    --swiper-theme-color: white;
+}

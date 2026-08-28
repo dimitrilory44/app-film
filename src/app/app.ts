@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { LoadingBar } from '@shared/components/loading-bar/loading-bar';
-import { TitleHeaderComponent } from '@shared/components/title-header/title-header';
+import { TitleHeaderComponent } from '@features/titles/components/title-header/title-header';
 import { filter } from 'rxjs';
 
 @Component({

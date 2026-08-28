@@ -1,0 +1,15 @@
+<div class="state-message state-message--error">
+    @if (illustration()) {
+    <img [src]="illustration()" alt="Problème reseau" class="state-message__illustration" />
+    }
+    
+    @if (title()) {
+    <h3 class="state-message__error">{{title()}}</h3>
+    }
+    @if (hint()) {
+    <p class="state-message__hint">{{ hint() }}</p>
+    }
+    @if (showRetry()) {
+    <button class="primary" (click)="retry.emit()">{{retryLabel()}}</button>
+    }
+</div>

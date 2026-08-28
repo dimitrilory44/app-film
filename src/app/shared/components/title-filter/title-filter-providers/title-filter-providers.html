@@ -1,0 +1,31 @@
+<div class="filter-panel">
+    <div class="filter-group">
+        <div class="filter-chip">
+            <span>Mes Services</span>
+            <span>({{ selectedProvidersCount() | number:'1.0-0' }})</span>
+        </div>
+    </div>
+    <a
+        class="action-btn__platforms"
+        aria-label="aller au filtre platforms"
+        (click)="openDialog()">
+        <img class="icon-plus" src="assets/plus_icon.png" alt="icone plus">
+    </a>
+    <div class="filter-providers" appSwiper [config]="swiperConfig">
+        <div class="swiper-wrapper">
+        
+            @for (provider of selectedProviders(); track provider.provider_id) {
+                <icon-chip 
+                    class="swiper-slide" 
+                    [iconUrl]="provider.logo_path | tmdbImage:'w45'" 
+                    [label]="provider.provider_name"
+                    [removable]="false" 
+                />
+            }
+
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+</div>

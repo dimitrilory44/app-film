@@ -3,10 +3,16 @@
         <div class="swiper-wrapper">
             @for (item of items(); track item.id) {
             <div class="swiper-slide">
-                <div class="netflix-card" [class.is-hovered]="hoveredMovieId() === item.id"
-                    (mouseenter)="onEnter(item.id)" (mouseleave)="onLeave()">
-                    <img [src]="item.poster_path | tmdbImage:'w185'" [alt]="getTitle(item)"
-                        class="netflix-card__poster" />
+                <div 
+                    class="netflix-card" 
+                    [class.is-hovered]="hoveredMovieId() === item.id"
+                    (mouseenter)="onEnter(item.id)" 
+                    (mouseleave)="onLeave()">
+                    <img 
+                        [src]="item.poster_path | tmdbImage:'w185'" 
+                        [alt]="getTitle(item)"
+                        class="netflix-card__poster" 
+                    />
 
                     <div class="netflix-card__info">
                         <p class="netflix-card__title">{{ getTitle(item) }}</p>
