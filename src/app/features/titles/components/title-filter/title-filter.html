@@ -9,8 +9,7 @@
             <mat-button-toggle value="movie">Films</mat-button-toggle>
             <mat-button-toggle value="tv">Séries</mat-button-toggle>
         </mat-button-toggle-group>
-
-        <span class="filter-items__count">{{ count() | number:'1.0-0' }} Titres</span>
+        <span class="filter-items__count">{{ countTitles() | number:'1.0-0' }} Titres</span>
     </div>
     <div class="filter-items__right">
         <button 
@@ -18,7 +17,7 @@
             aria-label="Plateformes disponibles"
             (click)="isFilterProviderPanelExpanded.set(!isFilterProviderPanelExpanded())">
             <div class="platforms__stack">
-                @for(provider of previewProviders(); track provider.provider_id) {
+                @for(provider of selectedProviders() | slice:0:5; track provider.provider_id) {
                 <img 
                     class="platforms__icon" 
                     [src]="provider.logo_path | tmdbImage:'w45':'assets/placeholder-icon.png'"
@@ -26,7 +25,7 @@
                     appImgFallback="assets/provider-fallback.svg"/>
                 }
             </div>
-            <span class="platforms__badge">{{ selectedProvidersCount() | number:'1.0-0' }}</span>
+            <span class="platforms__badge">{{ countProviders() | number:'1.0-0' }}</span>
         </button>
 
         <button 
@@ -39,20 +38,22 @@
         <button 
             mat-stroked-button 
             class="filter-btn"
-            [class.is-active]="isSelectedGenres()" 
+            [class.is-active]="activeCountFilters()" 
             aria-label="Filtres"
             (click)="isFilterCriteriaPanelExpanded.set(!isFilterCriteriaPanelExpanded())">
             <mat-icon>filter_alt</mat-icon>
             Filtres
-            @if (countFilters() > 0) {
-                <span class="filters__badge">{{ countFilters() | number:'1.0-0' }}</span>
-            }
+            <span 
+                class="filters__badge" 
+                [style.display]="activeCountFilters() > 0 ? 'inline-block' : 'none'">
+                {{ activeCountFilters() | number:'1.0-0' }}
+            </span>
         </button>
     </div>
 </div>
 
 @if (isFilterProviderPanelExpanded()) {
-<title-filter-providers/>
+<title-filter-providers [providers]="selectedProviders()" [count]="countProviders()"/>
 }
 
 <mat-menu #menu="matMenu" class="filter-menu" [overlapTrigger]="false">
@@ -67,6 +68,5 @@
 </mat-menu>
 
 @if (isFilterCriteriaPanelExpanded()) {
-<title-filter-criteria/>
+<title-filter-criteria />
 }
-

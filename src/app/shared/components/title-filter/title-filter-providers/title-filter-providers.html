@@ -2,7 +2,7 @@
     <div class="filter-group">
         <div class="filter-chip">
             <span>Mes Services</span>
-            <span>({{ selectedProvidersCount() | number:'1.0-0' }})</span>
+            <span>({{ count() | number:'1.0-0' }})</span>
         </div>
     </div>
     <a
@@ -14,7 +14,7 @@
     <div class="filter-providers" appSwiper [config]="swiperConfig">
         <div class="swiper-wrapper">
         
-            @for (provider of selectedProviders(); track provider.provider_id) {
+            @for (provider of providers(); track provider.provider_id) {
                 <icon-chip 
                     class="swiper-slide" 
                     [iconUrl]="provider.logo_path | tmdbImage:'w45'" 

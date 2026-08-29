@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, Injector, Signal, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, Injector, Signal, signal } from '@angular/core';
 import { environment } from '@environments/environment';
 import { GenreList, Providers, ProvidersApi, ProvidersState, TitleCollection, TitleDiscover } from '@core/models/media-model';
 import { HttpClient, httpResource } from '@angular/common/http';
@@ -22,23 +22,43 @@ export class TmdbApiService {
 
   readonly movieCollection = httpResource<TitleCollection>(() => `${this.#MOVIE_API_URL}/list/1`);
 
-  getGenderByMedia(mediaType: Signal<'all' | 'movie' | 'tv'>) {
-    return httpResource<GenreList>(() => {
-      if(mediaType() === 'all') return undefined;
-      return {
-        url: `${this.#MOVIE_API_URL}/genre/${mediaType()}/list`,
-        params: {
-          language: 'fr-FR'
-        }
-      }
-    })
+  readonly #moviesGender = httpResource<GenreList>(() => ({
+    url: `${this.#MOVIE_API_URL}/genre/movie/list`,
+    params: { language: 'fr-FR' } 
+  }));
+
+  readonly #seriesGender = httpResource<GenreList>(() => ({
+    url: `${this.#MOVIE_API_URL}/genre/tv/list`,
+    params: { language: 'fr-FR'}
+  })); 
+
+  readonly allGenders = computed(() => {
+    const movieGenderResults = this.#moviesGender.value()?.genres ?? [];
+    const seriesGenderResults = this.#seriesGender.value()?.genres ?? [];
+
+    return Array.from(
+      new Map(
+        [...movieGenderResults, ...seriesGenderResults].map
+        (genre => [
+          genre.id,
+          genre
+        ])
+      ).values()
+    );
+  });
+
+  getPopularMovies(page: Signal<number>) {
+    return this.#getPopular('movie', page);
   }
 
-  getPopularByMedia(mediaType: Signal<'all' | 'movie' | 'tv'>, page: Signal<number>) {
+  getPopularSeries(page: Signal<number>) {
+    return this.#getPopular('tv', page);
+  }
+
+  #getPopular(mediaType: 'movie' | 'tv', page: Signal<number>) {
     return httpResource<TitleDiscover>(() => {
-      if (mediaType() === 'all') return undefined;
       return {
-        url: `${this.#MOVIE_API_URL}/discover/${mediaType()}`,
+        url: `${this.#MOVIE_API_URL}/discover/${mediaType}`,
         params: {
           language: 'fr-FR',
           watch_region: 'FR',

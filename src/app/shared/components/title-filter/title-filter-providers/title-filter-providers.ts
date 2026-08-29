@@ -1,7 +1,7 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { UserPreferencesService } from '@core/services/user-preferences-service';
+import { Provider } from '@core/models/media-model';
 import { IconChipComponent } from "@shared/components/icon-chip/icon-chip";
 import { ProviderSettings } from '@shared/components/provider-settings/provider-settings';
 import { SwiperDirective } from '@shared/directives/swiper.directive';
@@ -14,11 +14,10 @@ import { TmdbImagePipe } from '@shared/pipes/tmdb-image.pipe';
   styleUrl: './title-filter-providers.scss',
 })
 export class TitleFilterProvidersComponent {
-  readonly #userPreferencesService = inject(UserPreferencesService);
   readonly #dialog = inject(MatDialog);
 
-  readonly selectedProviders = this.#userPreferencesService.selectedProviders;
-  readonly selectedProvidersCount = computed(() => this.selectedProviders().length);
+  readonly providers = input<Provider[]>([]);
+  readonly count = input<number>(1);
 
   readonly swiperConfig = {
     slidesPerView: 'auto' as const,

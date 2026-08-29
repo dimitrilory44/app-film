@@ -26,8 +26,8 @@ export class PopularTitlesComponent {
   readonly selectedProviderIds = this.#userPreferencesService.selectedProvidersIds;
   readonly selectedGenresIds = this.#userPreferencesService.selectedTitlesGenreIds;
 
-  readonly moviesPopular = this.#tmdbApiService.getPopularByMedia(signal('movie'), this.currentPage);
-  readonly seriesPopular = this.#tmdbApiService.getPopularByMedia(signal('tv'), this.currentPage);
+  readonly moviesPopular = this.#tmdbApiService.getPopularMovies(this.currentPage);
+  readonly seriesPopular = this.#tmdbApiService.getPopularSeries(this.currentPage);
 
   readonly allPopular = computed(() => {
     const moviesResults = (this.moviesPopular.value()?.results ?? []).map(m => ({

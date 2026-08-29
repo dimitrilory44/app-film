@@ -1,4 +1,4 @@
-import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
+import { Component, inject, linkedSignal, signal } from '@angular/core';
 import { MatMenuModule } from "@angular/material/menu";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
@@ -17,35 +17,16 @@ export class TitleFilterCriteriaComponent {
   readonly #userPreferencesService = inject(UserPreferencesService);
   readonly #tmdbApiService = inject(TmdbApiService);
 
-  readonly selectedGenres = linkedSignal<Genre[]>(() => this.#userPreferencesService.selectedTitlesGenre());
-  readonly isSelectedGenres = computed(() => this.selectedGenres().length > 0);
-
   readonly isOpened = signal(false);
 
-  readonly genresMovies = this.#tmdbApiService.getGenderByMedia(signal('movie'));
-  readonly genresSeries = this.#tmdbApiService.getGenderByMedia(signal('tv'));
+  readonly selectedGenres = linkedSignal<Genre[]>(() => this.#userPreferencesService.selectedTitlesGenre());
+  readonly hasSelectedGenres = this.#userPreferencesService.hasSelectedTitlesGenre;
 
-  readonly allGenres = computed(() => {
-    const moviesResults = this.genresMovies.value()?.genres ?? [];
-    const seriesResults = this.genresSeries.value()?.genres ?? [];
-    return Array.from(
-      new Map(
-        [...moviesResults, ...seriesResults].map
-        (genre => [
-          genre.id,
-          genre
-        ])
-      ).values()
-    );
-  })
+  readonly allGenders = this.#tmdbApiService.allGenders;
 
-  onGenresMenuOpened() {
-    this.isOpened.set(true);
-  }
+  onGenresMenuOpened() { this.isOpened.set(true); }
 
-  onGenresMenuClosed() {
-    this.isOpened.set(false);
-  }
+  onGenresMenuClosed() { this.isOpened.set(false); }
 
   isSelected(id: number): boolean {
     return this.selectedGenres().some(g => g.id === id);
@@ -57,12 +38,8 @@ export class TitleFilterCriteriaComponent {
     const updated = exists
       ? current.filter(g => g.id !== genre.id)
       : [...current, genre];
-    this.selectedGenres.set(this.sortById(updated));
+    this.selectedGenres.set(updated.sort((a, b) => a.id - b.id));
     this.#userPreferencesService.setSelectedTitlesGenre(this.selectedGenres());
-  }
-
-  sortById<T extends { id: number }>(items: T[]): T[] {
-    return [...items].sort((a, b) => a.id - b.id);
   }
 
   reset() {

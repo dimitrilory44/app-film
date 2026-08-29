@@ -1,6 +1,6 @@
 <div class="filter-panel">
     <div class="filter-panel__header">
-        <span [class.is-active]="isSelectedGenres()">Genres</span>
+        <span [class.is-active]="hasSelectedGenres()">Genres</span>
         <button 
             mat-icon-button 
             class="filter-trigger"
@@ -9,9 +9,9 @@
             (menuClosed)="onGenresMenuClosed()" 
         >
         @if (isOpened()) {
-            <mat-icon [class.is-active]="isSelectedGenres()">expand_less</mat-icon>
+            <mat-icon [class.is-active]="hasSelectedGenres()">expand_less</mat-icon>
         } @else {
-            <mat-icon [class.is-active]="isSelectedGenres()">expand_more</mat-icon>
+            <mat-icon [class.is-active]="hasSelectedGenres()">expand_more</mat-icon>
         }
         </button>
     </div>
@@ -29,13 +29,14 @@
             </div>
 
             <div class="genres-panel__grid">
-                @for (genre of allGenres(); track genre.id) {
+                @for (gender of allGenders(); track gender.id) {
                     <mat-checkbox 
                         class="btn-checkbox"
-                        [checked]="isSelected(genre.id)"
-                        (change)="toggleGenre(genre)"
+                        [checked]="isSelected(gender.id)"
+                        (change)="toggleGenre(gender)"
                         (click)="$event.stopPropagation()">
-                        {{ genre.name }}</mat-checkbox>
+                        {{ gender.name }}
+                    </mat-checkbox>
                 }
             </div>
         </div>
