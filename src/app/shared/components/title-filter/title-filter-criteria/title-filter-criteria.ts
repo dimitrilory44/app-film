@@ -2,10 +2,10 @@ import { Component, inject, linkedSignal, signal } from '@angular/core';
 import { MatMenuModule } from "@angular/material/menu";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
-import { Genre } from '@core/models/media-model';
+import { CriteriaList, Genre } from '@core/models/media-model';
 import { UserPreferencesService } from '@core/services/user-preferences-service';
-import { TmdbApiService } from '@core/services/tmdb-api';
 import { MatButtonModule } from '@angular/material/button';
+import { TmdbApiService } from '@core/services/tmdb-api';
 
 @Component({
   selector: 'title-filter-criteria',
@@ -19,10 +19,13 @@ export class TitleFilterCriteriaComponent {
 
   readonly isOpened = signal(false);
 
+  readonly criterias = [
+    { label: 'Genres', hasOpened: false, value: this.#tmdbApiService.allGenders() },
+    { label: 'Année de sortie', hasOpened: false, value: [] }
+  ];
+
   readonly selectedGenres = linkedSignal<Genre[]>(() => this.#userPreferencesService.selectedTitlesGenre());
   readonly hasSelectedGenres = this.#userPreferencesService.hasSelectedTitlesGenre;
-
-  readonly allGenders = this.#tmdbApiService.allGenders;
 
   onGenresMenuOpened() { this.isOpened.set(true); }
 
@@ -32,12 +35,12 @@ export class TitleFilterCriteriaComponent {
     return this.selectedGenres().some(g => g.id === id);
   }
 
-  toggleGenre(genre: Genre): void {
+  toggleItem(item: Genre): void {
     const current = this.selectedGenres();
-    const exists = current.some(g => g.id === genre.id);
+    const exists = current.some(g => g.id === item.id);
     const updated = exists
-      ? current.filter(g => g.id !== genre.id)
-      : [...current, genre];
+      ? current.filter(g => g.id !== item.id)
+      : [...current, item];
     this.selectedGenres.set(updated.sort((a, b) => a.id - b.id));
     this.#userPreferencesService.setSelectedTitlesGenre(this.selectedGenres());
   }

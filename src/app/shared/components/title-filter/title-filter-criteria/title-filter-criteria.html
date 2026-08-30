@@ -1,10 +1,12 @@
 <div class="filter-panel">
-    <div class="filter-panel__header">
-        <span [class.is-active]="hasSelectedGenres()">Genres</span>
+
+    @for (criteria of criterias; track criteria.label) {
+    <div class="filter-items">
+        <span [class.is-active]="hasSelectedGenres()">{{criteria.label}}</span>
         <button 
             mat-icon-button 
             class="filter-trigger"
-            [matMenuTriggerFor]="genresMenu"
+            [matMenuTriggerFor]="criteriaMenu"
             (menuOpened)="onGenresMenuOpened()"
             (menuClosed)="onGenresMenuClosed()" 
         >
@@ -15,30 +17,31 @@
         }
         </button>
     </div>
-
-    <mat-menu #genresMenu="matMenu" class="genres-menu" [overlapTrigger]="false" yPosition="below">
-        <div class="genres-panel" (click)="$event.stopPropagation()">
-            <div class="genres-panel__header">
-                <span class="genres-panel__title">Genres</span>
+    
+    <mat-menu #criteriaMenu="matMenu" class="criteria-menu" [overlapTrigger]="false" yPosition="below">
+        <div class="criteria-panel" (click)="$event.stopPropagation()">
+            <div class="criteria-panel__header">
+                <span class="criteria-panel__title">{{criteria.label}}</span>
                 <button 
-                    class="genres-panel__reset"
+                    class="criteria-panel__reset"
                     (click)="reset()">
                     <mat-icon>close</mat-icon>
                     Réinitialiser
                 </button>
             </div>
-
-            <div class="genres-panel__grid">
-                @for (gender of allGenders(); track gender.id) {
+    
+            <div class="criteria-panel__grid">
+                    @for (item of criteria.value; track item.id) {
                     <mat-checkbox 
                         class="btn-checkbox"
-                        [checked]="isSelected(gender.id)"
-                        (change)="toggleGenre(gender)"
+                        [checked]="isSelected(item.id)"
+                        (change)="toggleItem(item)"
                         (click)="$event.stopPropagation()">
-                        {{ gender.name }}
+                        {{ item.name}}
                     </mat-checkbox>
-                }
+                    }
             </div>
         </div>
     </mat-menu>
+    }
 </div>

@@ -3,20 +3,20 @@
   background: #11151f;
   display: flex;
   padding: 15px 64px;
+}
 
-  &__header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #e5e7eb;
-  }
+.filter-items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e5e7eb;
 }
 
 .is-active {
   color: #f5c518;
 }
 
-.genres-panel {
+.criteria-panel {
   padding: 10px;
   background: #11151f;
 

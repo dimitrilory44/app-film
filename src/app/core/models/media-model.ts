@@ -5,6 +5,12 @@ export interface UserPreferences {
   selectedTitlesGenre?: Genre[];
 }
 
+export interface CriteriaList<T> {
+  label: string;
+  hasOpened: boolean;
+  value: Signal<T[]>
+}
+
 export interface ProvidersState<T> {
   value: Signal<T | undefined>;
   isLoading: Signal<boolean>;

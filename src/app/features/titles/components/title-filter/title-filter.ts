@@ -14,7 +14,6 @@ import { TmdbImagePipe } from '@shared/pipes/tmdb-image.pipe';
 import { ImgFallbackDirective } from '@shared/directives/img-fallback.directive';
 import { TitleFilterProvidersComponent } from "@shared/components/title-filter/title-filter-providers/title-filter-providers";
 import { TitleFilterCriteriaComponent } from '@shared/components/title-filter/title-filter-criteria/title-filter-criteria';
-import { TmdbApiService } from '@core/services/tmdb-api';
 
 @Component({
   selector: 'title-filter',
@@ -25,7 +24,6 @@ import { TmdbApiService } from '@core/services/tmdb-api';
 export class TitleFilterComponent {
   readonly #router = inject(Router);
   readonly #userPreferencesService = inject(UserPreferencesService);
-  readonly #tmdb = inject(TmdbApiService);
   
   readonly items = input<Media[]>([]);
   readonly countTitles = input<number>(0);
@@ -40,8 +38,6 @@ export class TitleFilterComponent {
   
   readonly countProviders = this.#userPreferencesService.selectedCountProviders;
   readonly selectedProviders = this.#userPreferencesService.selectedProviders;
-
-  readonly test = this.#tmdb.allGenders;
   
   readonly sortOptions = [
     { value: 'popularity' as const, label: 'Popularité' },
