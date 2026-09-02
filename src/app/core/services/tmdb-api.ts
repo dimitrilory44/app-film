@@ -1,6 +1,6 @@
 import { computed, effect, inject, Injectable, Injector, Signal, signal } from '@angular/core';
 import { environment } from '@environments/environment';
-import { GenreList, Providers, ProvidersApi, ProvidersState, TitleCollection, TitleDiscover } from '@core/models/media-model';
+import { Genre, GenreList, Providers, ProvidersApi, ProvidersState, TitleCollection, TitleDiscover } from '@core/models/media-model';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { UserPreferencesService } from './user-preferences-service';
 import { catchError, map, timeout } from 'rxjs/operators';
@@ -17,8 +17,15 @@ export class TmdbApiService {
   readonly #MOVIE_API_URL = environment.tmdbUrl;
   readonly mediaType = signal<'all' | 'movie' | 'tv'>('movie');
   
-  readonly providersIds = this.#userPreferencesService.selectedProvidersIds;
-  readonly genresIds = this.#userPreferencesService.selectedTitlesGenreIds;
+  readonly providersIds = computed(() => this.#userPreferencesService.selectedProviders().map(sp => sp.provider_id).join('|'));
+  readonly genresIds = computed(() => this.#userPreferencesService.genreHelpers.items().map(sg => sg.id).join('|'));
+
+  readonly filterYear = computed(() => {
+    const items = this.#userPreferencesService.releaseDateHelpers.items();
+    const beginDate = items.startYear ? `${items.startYear}-01-01` : '1900-01-01';
+    const endDate = items.endYear ? `${items.endYear}-12-31` : `${new Date().getFullYear()}-12-31`;
+    return { beginDate, endDate }
+  });
 
   readonly movieCollection = httpResource<TitleCollection>(() => `${this.#MOVIE_API_URL}/list/1`);
 
@@ -32,7 +39,7 @@ export class TmdbApiService {
     params: { language: 'fr-FR'}
   })); 
 
-  readonly allGenders = computed(() => {
+  readonly allGenders = computed<Genre[]>(() => {
     const movieGenderResults = this.#moviesGender.value()?.genres ?? [];
     const seriesGenderResults = this.#seriesGender.value()?.genres ?? [];
 
@@ -55,25 +62,45 @@ export class TmdbApiService {
     return this.#getPopular('tv', page);
   }
 
+  getProvidersMovies() {
+    return this.#getProviders('movie');
+  }
+
+  getProvidersSeries() {
+    return this.#getProviders('tv');
+  }
+
   #getPopular(mediaType: 'movie' | 'tv', page: Signal<number>) {
     return httpResource<TitleDiscover>(() => {
+      const params: any = {
+        language: 'fr-FR',
+        watch_region: 'FR',
+        page: page(),
+        sort_by: 'popularity.desc',
+        with_watch_providers: this.providersIds(),
+        with_genres: this.genresIds(),
+      };
+
+      const isDateFilterActive = !this.#userPreferencesService.releaseDateHelpers.isDefault();
+
+      if (isDateFilterActive) {
+        const { beginDate, endDate } = this.filterYear();
+        const gteKey = mediaType === 'movie' ? 'primary_release_date.gte' : 'first_air_date.gte';
+        const lteKey = mediaType === 'movie' ? 'primary_release_date.lte' : 'first_air_date.lte';
+        params[gteKey] = beginDate;
+        params[lteKey] = endDate;
+      }
+
       return {
         url: `${this.#MOVIE_API_URL}/discover/${mediaType}`,
-        params: {
-          language: 'fr-FR',
-          watch_region: 'FR',
-          page: page(),
-          sort_by: 'popularity.desc',
-          with_watch_providers: this.providersIds(),
-          with_genres: this.genresIds()
-        }
+        params
       }
     });
   }
 
   // Problème rxResource v21
   // Contournement manuel afin de pouvoir ajouter une erreur lorsque les resources ne sont pas chargé (ou hors-ligne)
-  getProvidersByMedia(mediaType: Signal<'all' | 'movie' | 'tv'>): ProvidersState<Providers> {
+  #getProviders(mediaType: 'movie' | 'tv'): ProvidersState<Providers> {
     const value = signal<Providers | undefined>(undefined);
     const isLoading = signal(false);
     const error = signal<Error | undefined>(undefined);
@@ -82,16 +109,7 @@ export class TmdbApiService {
     const fetch = () => {
       subscription?.unsubscribe();
 
-      const type = mediaType();
-
-      if (type === 'all') {
-        value.set(undefined);
-        isLoading.set(false);
-        error.set(undefined);
-        return;
-      }
-
-      const url = `${this.#MOVIE_API_URL}/watch/providers/${type}?language=fr-FR&watch_region=FR`;
+      const url = `${this.#MOVIE_API_URL}/watch/providers/${mediaType}?language=fr-FR&watch_region=FR`;
 
       isLoading.set(true);
       error.set(undefined);
@@ -118,7 +136,6 @@ export class TmdbApiService {
     };
 
     effect(() => {
-      mediaType();
       fetch();
     }, { injector: this.#injector });
 

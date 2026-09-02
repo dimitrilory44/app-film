@@ -17,8 +17,8 @@
 }
 
 .criteria-panel {
-  padding: 10px;
   background: #11151f;
+  padding: 10px 15px;
 
   &__header {
     display: flex;
@@ -43,12 +43,56 @@
     cursor: pointer;
   }
 
-  &__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  &__box {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+  }
+
+  &__list {
+    column-gap: 10px; 
+    display: grid; 
+    grid-template-columns: 50% 50%;
+  }
+
+  &__range {
+    min-width: 450px;
+
+    &__slider {
+      display: flex; 
+      align-items: center;
+    }
+
+    &__actions {
+      display: flex;
+      margin-top: 10px;
+    }
+  }
+
+  &__end {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
 .filter-trigger {
   color: white;
+}
+
+.filter_area {
+  width: 240px;
+
+  &__start,
+  &__end {
+    color: white;
+  }
+
+  &__start {
+    margin-right: 10px;
+  }
+
+  &__end {
+    margin-left: 10px;
+  }
 }

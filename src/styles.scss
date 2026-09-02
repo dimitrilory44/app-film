@@ -65,6 +65,8 @@ mat-divider {
 .btn-checkbox {
   --mdc-checkbox-selected-icon-color: #FFD700 !important;
 
+  margin-inline-end: 10px;
+
   &:disabled {
     opacity: 0.4 !important;
     cursor: not-allowed !important;
@@ -89,7 +91,18 @@ mat-divider {
     border-color: #FFD700 !important;
     background-color: #FFD700 !important;
   }
+
 }
+mat-slider {
+  --mat-slider-active-track-color: #FFD700;
+  --mat-slider-thumb-color: #FFD700;
+  --mat-slider-handle-color: #FFD700;
+  --mat-slider-label-container-color: #FFD700;
+  --mat-slider-label-label-text-color: black;
+  --mat-sys-primary: #FFD700;
+  --mat-slider-value-indicator-width: 30px;
+}
+
 
 .dialog-panel {
     .mat-mdc-dialog-container {

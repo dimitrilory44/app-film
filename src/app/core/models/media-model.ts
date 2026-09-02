@@ -1,14 +1,35 @@
-import { Signal } from "@angular/core";
+import { Signal, WritableSignal } from "@angular/core";
+import { Media } from "@shared/types/collection.types";
 
 export interface UserPreferences {
   selectedProviders?: Provider[];
-  selectedTitlesGenre?: Genre[];
+  selectedCriteria?: Criteria;
 }
 
-export interface CriteriaList<T> {
-  label: string;
-  hasOpened: boolean;
-  value: Signal<T[]>
+interface CriteriaBase<K extends keyof Criteria> {
+  id: number;
+  key: K;
+  hasSelected: WritableSignal<boolean>;
+}
+
+export interface CriteriaListItem<K extends keyof Criteria> extends CriteriaBase<K> {
+  type: 'list';
+  value?: Signal<NonNullable<Criteria[K]>>;
+}
+
+export interface CriteriaRangeItem<K extends keyof Criteria> extends CriteriaBase<K> {
+  type: 'range';
+  value?: Signal<NonNullable<Criteria[K]>>;
+}
+
+export interface Criteria {
+  genders?: Genre[];
+  release?: ReleaseDate;
+}
+
+export interface ReleaseDate {
+  startYear: number;
+  endYear: number;
 }
 
 export interface ProvidersState<T> {
@@ -77,7 +98,6 @@ export interface SeriesMedia extends BaseMedia {
   first_air_date: string;
 }
 
-export type Media = MovieMedia | SeriesMedia;
 
 export function getMediaTitle(media: Media): string {
   return media.media_type === 'movie' ? media.title : media.name;

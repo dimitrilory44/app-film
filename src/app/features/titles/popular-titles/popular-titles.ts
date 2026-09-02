@@ -2,10 +2,10 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { TitleFilterComponent } from '@features/titles/components/title-filter/title-filter';
 import { TitleListComponent } from '@features/titles/components/title-list/title-list';
 import { TmdbApiService } from '@core/services/tmdb-api';
-import { Media, MovieMedia, SeriesMedia } from '@core/models/media-model';
+import { MovieMedia, SeriesMedia } from '@core/models/media-model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { UserPreferencesService } from '@core/services/user-preferences-service';
 import { StateMessage } from "@shared/components/state-message/state-message";
+import { Media } from '@shared/types/collection.types';
 
 @Component({
   selector: 'popular-page',
@@ -15,7 +15,6 @@ import { StateMessage } from "@shared/components/state-message/state-message";
 })
 export class PopularTitlesComponent {
   readonly #tmdbApiService = inject(TmdbApiService);
-  readonly #userPreferencesService = inject(UserPreferencesService);
 
   readonly mediaType = input.required<'all' | 'movie' | 'tv'>();
   readonly titles = signal<Media[]>([]);
@@ -23,8 +22,10 @@ export class PopularTitlesComponent {
   readonly isLoadingMore = signal(false);
   readonly loadMoreError = signal(false);
 
-  readonly selectedProviderIds = this.#userPreferencesService.selectedProvidersIds;
-  readonly selectedGenresIds = this.#userPreferencesService.selectedTitlesGenreIds;
+  readonly selectedProviderIds = this.#tmdbApiService.providersIds;
+  readonly selectedGenresIds = this.#tmdbApiService.genresIds;
+  readonly selectedBeginYear = computed(() => this.#tmdbApiService.filterYear().beginDate);
+  readonly selectedEndYear = computed(() => this.#tmdbApiService.filterYear().endDate);
 
   readonly moviesPopular = this.#tmdbApiService.getPopularMovies(this.currentPage);
   readonly seriesPopular = this.#tmdbApiService.getPopularSeries(this.currentPage);
@@ -71,6 +72,8 @@ export class PopularTitlesComponent {
     effect(() => {
       this.selectedGenresIds();
       this.selectedProviderIds();
+      this.selectedBeginYear();
+      this.selectedEndYear();
       this.titles.set([]);
       this.currentPage.set(1);
       this.loadMoreError.set(false);

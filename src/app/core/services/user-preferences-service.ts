@@ -1,5 +1,6 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
-import { Genre, Provider, UserPreferences } from '@core/models/media-model';
+import { Criteria, Provider, UserPreferences } from '@core/models/media-model';
+import { makeRangeHelpers, makeSelectionHelpers } from '@shared/helpers/collection.helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +12,11 @@ export class UserPreferencesService {
 
   readonly selectedProviders = computed(() => this.selectedData().selectedProviders ?? []);
   readonly selectedCountProviders = computed(() => this.selectedProviders().length ?? 0);
-  readonly selectedProvidersIds = computed(() => this.selectedProviders().map(sp => sp.provider_id).join('|'));
 
-  readonly selectedTitlesGenre = computed(() => this.selectedData().selectedTitlesGenre ?? []);
-  readonly selectedCountTitlesGenre = computed(() => this.selectedTitlesGenre().length);
-  readonly selectedTitlesGenreIds = computed(() => this.selectedTitlesGenre().map(sp => sp.id).join('|'));
-  readonly hasSelectedTitlesGenre = computed(() => this.selectedTitlesGenre().length > 0);
+  readonly selectedCriteria = computed(() => this.selectedData().selectedCriteria);
+
+  readonly genreHelpers = makeSelectionHelpers('genders', this.selectedCriteria);
+  readonly releaseDateHelpers = makeRangeHelpers('release', this.selectedCriteria, { startYear: 1900, endYear: new Date().getFullYear() });
 
   #loadFromStorage(): UserPreferences {
     const raw = localStorage.getItem(this.STORAGE_KEY);
@@ -33,8 +33,12 @@ export class UserPreferencesService {
     this.selectedData.update(current => ({...current, selectedProviders: providers}));
   }
 
-  setSelectedTitlesGenre(genres: Genre[]): void {
-    this.selectedData.update(current => ({...current, selectedTitlesGenre: genres}));
+  setCriteria<K extends keyof Criteria>(key: K, value: Criteria[K]) {
+    this.selectedData.update(current => ({...current, selectedCriteria: { ...current.selectedCriteria, [key]: value }}))
+  }
+
+  setAllCriteria(criteria: Criteria) {
+    this.selectedData.update(current => ({...current, selectedCriteria: criteria}));
   }
 
   constructor() {

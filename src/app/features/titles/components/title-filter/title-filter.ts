@@ -8,12 +8,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { Router } from '@angular/router';
-import { Media } from '@core/models/media-model';
 import { UserPreferencesService } from '@core/services/user-preferences-service';
 import { TmdbImagePipe } from '@shared/pipes/tmdb-image.pipe';
 import { ImgFallbackDirective } from '@shared/directives/img-fallback.directive';
 import { TitleFilterProvidersComponent } from "@shared/components/title-filter/title-filter-providers/title-filter-providers";
 import { TitleFilterCriteriaComponent } from '@shared/components/title-filter/title-filter-criteria/title-filter-criteria';
+import { Media } from '@shared/types/collection.types';
 
 @Component({
   selector: 'title-filter',
@@ -47,7 +47,8 @@ export class TitleFilterComponent {
 
   readonly activeCountFilters = computed(() => {
     let count = 0;
-    count += this.#userPreferencesService.selectedCountTitlesGenre();
+    count += this.#userPreferencesService.genreHelpers.count();
+    count += this.#userPreferencesService.releaseDateHelpers.isDefault() ? 0 : 1;
     // autres : count += this.selectedYear() ? 1 : 0;
     return count;
   });

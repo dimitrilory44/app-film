@@ -2,9 +2,10 @@ import { DecimalPipe } from '@angular/common';
 import { Component, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { getMediaTitle, Media } from '@core/models/media-model';
+import { getMediaTitle } from '@core/models/media-model';
 import { SwiperDirective } from '@shared/directives/swiper.directive';
 import { TmdbImagePipe } from '@shared/pipes/tmdb-image.pipe';
+import { Media } from '@shared/types/collection.types';
 
 @Component({
   selector: 'title-carousel',

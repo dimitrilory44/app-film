@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
+import { Component, computed, effect, inject, linkedSignal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TmdbApiService } from '@core/services/tmdb-api';
@@ -36,8 +36,8 @@ export class ProviderSettings {
   readonly isOnline = this.#onlineStatus.isOnline;
   readonly mediaType = this.#tmdbApiService.mediaType;
 
-  readonly providersMovies = this.#tmdbApiService.getProvidersByMedia(signal('movie'));
-  readonly providersSeries = this.#tmdbApiService.getProvidersByMedia(signal('tv'));
+  readonly providersMovies = this.#tmdbApiService.getProvidersMovies();
+  readonly providersSeries = this.#tmdbApiService.getProvidersSeries();
 
   searchControl = new FormControl('', { nonNullable: true });
   readonly searchTerm = toSignal(this.searchControl.valueChanges, { initialValue: '' });
