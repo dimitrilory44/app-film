@@ -1,4 +1,4 @@
-import { Signal, WritableSignal } from "@angular/core";
+import { Signal } from "@angular/core";
 import { Media } from "@shared/types/collection.types";
 
 export interface UserPreferences {
@@ -9,7 +9,8 @@ export interface UserPreferences {
 interface CriteriaBase<K extends keyof Criteria> {
   id: number;
   key: K;
-  hasSelected: WritableSignal<boolean>;
+  hasSelected?: boolean;
+  groupKeyWith?: string;
 }
 
 export interface CriteriaListItem<K extends keyof Criteria> extends CriteriaBase<K> {
@@ -25,6 +26,13 @@ export interface CriteriaRangeItem<K extends keyof Criteria> extends CriteriaBas
 export interface Criteria {
   genders?: Genre[];
   release?: ReleaseDate;
+  note?: number;
+  notes?: any[];
+  country?: any[];
+  duration?: object;
+  age?: any[];
+  moviesAge?: any[];
+  seriesAge?: any[];
 }
 
 export interface ReleaseDate {

@@ -1,12 +1,13 @@
 <div class="filter-panel">
-
-    @for (criteria of criterias; track criteria.id) {
+    @for (criteria of filteredCriteria(); track criteria.id) {
     <div class="filter-items">
         <span [class.is-active]="onCriteriaChange(criteria.key)">{{onConvertKeyToLabel(criteria.key)}}</span>
-        <button mat-icon-button class="filter-trigger" [matMenuTriggerFor]="criteriaMenu"
-            (menuOpened)="onGenresMenuOpened(criteria.id)" (menuClosed)="onGenresMenuClosed(criteria.id)">
+        <button mat-icon-button class="filter-trigger"
+            [matMenuTriggerFor]="isMultiMode(criteria.key) ? combinedMenu : monoMenu"
+            (menuOpened)="onGenresMenuOpened(criteria.id, criteria.key)"
+            (menuClosed)="onGenresMenuClosed(criteria.id, criteria.key)">
 
-            @if (criteria.hasSelected()) {
+            @if (criteria.hasSelected) {
             <mat-icon [class.is-active]="onCriteriaChange(criteria.key)">expand_less</mat-icon>
             } @else {
             <mat-icon [class.is-active]="onCriteriaChange(criteria.key)">expand_more</mat-icon>
@@ -14,7 +15,7 @@
         </button>
     </div>
 
-    <mat-menu #criteriaMenu="matMenu" class="criteria-menu" [overlapTrigger]="false" yPosition="below">
+    <mat-menu #monoMenu="matMenu" class="criteria-menu" [overlapTrigger]="false" yPosition="below">
         <div class="criteria-panel" (click)="$event.stopPropagation()">
             <div class="criteria-panel__header">
                 <span class="criteria-panel__title">{{onConvertKeyToLabel(criteria.key)}}</span>
@@ -34,14 +35,15 @@
                     </mat-checkbox>
                     }
                 </div>
-                } @else if (criteria.type === 'range') {
+                } @else {
                 <div class="criteria-panel__range">
                     <form [formGroup]="form">
                         <div formArrayName="releaseDates">
                             @for (group of releaseDates.controls; track group; let i = $index) {
                             <div [formGroupName]="i" class="criteria-panel__range__slider">
                                 <div class="filter_area__start">1900</div>
-                                <mat-slider min="1900" max="2026" step="1" discrete="true" showTickMarks="true" class="filter_area">
+                                <mat-slider min="1900" max="2026" step="1" discrete="true" showTickMarks="true"
+                                    class="filter_area">
                                     <input formControlName="startYear" value="1900" matSliderStartThumb
                                         (change)="onReleaseDateChange(criteria.key, $event, i)">
                                     <input formControlName="endYear" value="2026" matSliderEndThumb
@@ -50,15 +52,11 @@
                                 <div class="filter_area__end">{{ currentYear }}</div>
                             </div>
                             <div class="criteria-panel__range__actions">
-                                <mat-checkbox 
-                                    class="btn-checkbox" 
-                                    [checked]="selectedRange() === 'thisYear'"
-                                    (click)="$event.stopPropagation()" 
+                                <mat-checkbox class="btn-checkbox" [checked]="selectedRange() === 'thisYear'"
+                                    (click)="$event.stopPropagation()"
                                     (change)="onSelectRangePreset(criteria.key, i, 'thisYear')">
                                     Cette année</mat-checkbox>
-                                <mat-checkbox 
-                                    class="btn-checkbox" 
-                                    [checked]="selectedRange() === 'lastYear'"
+                                <mat-checkbox class="btn-checkbox" [checked]="selectedRange() === 'lastYear'"
                                     (change)="onSelectRangePreset(criteria.key, i, 'lastYear')"
                                     (click)="$event.stopPropagation()">
                                     Année dernière</mat-checkbox>
@@ -71,10 +69,50 @@
             </div>
         </div>
     </mat-menu>
+
+    <mat-menu #combinedMenu="matMenu" class="criteria-menu" [overlapTrigger]="false" yPosition="below">
+        <div class="criteria-panel" (click)="$event.stopPropagation()">
+            @for (multi of multiCriteria; track multi.id) {
+            <div class="criteria-panel__header">
+                <span class="criteria-panel__title">{{onConvertKeyToLabel(multi.key)}}</span>
+                <button class="criteria-panel__reset" (click)="reset(multi.key)">
+                    <mat-icon>close</mat-icon>
+                    Réinitialiser
+                </button>
+            </div>
+            <div class="criteria-panel__box">
+                @if (multi.type === 'list') {
+                <div style="display: flex; flex-flow: wrap;">
+                    <mat-checkbox class="btn-checkbox">1k+</mat-checkbox>
+                    <mat-checkbox class="btn-checkbox">10k+</mat-checkbox>
+                    <mat-checkbox class="btn-checkbox">100k+</mat-checkbox>
+                    <mat-checkbox class="btn-checkbox">1m+</mat-checkbox>
+                </div>
+                } @else {
+                <div class="criteria-panel__range">
+                    <form>
+                        <div>
+                            <div class="criteria-panel__range__slider">
+                                <img src="assets/tmdb_logo.jpg" alt="icone_tmdb" width="24" height="24" style="margin-right: 10px">
+                                <div class="filter_area__start">0</div>
+                                <mat-slider min="0" max="10" step="1" discrete="true" showTickMarks="true"
+                                    class="filter_area">
+                                    <input matSliderThumb>
+                                </mat-slider>
+                                <div class="filter_area__end">10</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </mat-menu>
     }
     <div class="criteria-panel__end">
         <button class="criteria-panel__reset" (click)="resetAll()">
-        <mat-icon>close</mat-icon>
+            <mat-icon>close</mat-icon>
             Réinitialiser
         </button>
     </div>

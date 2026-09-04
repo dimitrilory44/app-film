@@ -12,12 +12,15 @@ export function makeSelectionHelpers<K extends ArrayKeys<Criteria> & keyof Crite
     return { items, count, hasItems };
 }
 
-export function makeRangeHelpers<K extends RangeKeys<Criteria> & keyof Criteria>(key: K, criteria: Signal<Criteria | undefined>, defaultValue: NonNullable<Criteria[K]>) {
+export function makeRangeHelpers<K extends RangeKeys<Criteria> & keyof Criteria>(key: K, criteria: Signal<Criteria | undefined>, defaultValue: NonNullable<Criteria[K]>, isEqualFn?: (a: NonNullable<Criteria[K]>, b: NonNullable<Criteria[K]>) => boolean) {
     const items = computed<NonNullable<Criteria[K]>>(() => {
         return criteria()?.[key] ?? defaultValue;
     });
-    console.log('items :', items());
-    console.log('default :', defaultValue);
-    const isDefault = computed(() => JSON.stringify(items()) === JSON.stringify(defaultValue));
+    const isDefault = computed(() => {
+        if (isEqualFn) {
+            return isEqualFn(items(), defaultValue);
+        }
+        return JSON.stringify(items()) === JSON.stringify(defaultValue)
+    });
     return { items, isDefault };
 }

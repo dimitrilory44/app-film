@@ -11,9 +11,9 @@ import { Router } from '@angular/router';
 import { UserPreferencesService } from '@core/services/user-preferences-service';
 import { TmdbImagePipe } from '@shared/pipes/tmdb-image.pipe';
 import { ImgFallbackDirective } from '@shared/directives/img-fallback.directive';
-import { TitleFilterProvidersComponent } from "@shared/components/title-filter/title-filter-providers/title-filter-providers";
-import { TitleFilterCriteriaComponent } from '@shared/components/title-filter/title-filter-criteria/title-filter-criteria';
+import { TitleFilterCriteriaComponent } from '@features/titles/components/title-filter/title-filter-criteria/title-filter-criteria';
 import { Media } from '@shared/types/collection.types';
+import { TitleFilterProvidersComponent } from './title-filter-providers/title-filter-providers';
 
 @Component({
   selector: 'title-filter',

@@ -9,7 +9,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { IconChipComponent } from '../icon-chip/icon-chip';
+import { IconChipComponent } from '@shared/components/icon-chip/icon-chip';
 import { DecimalPipe } from '@angular/common';
 import { UserPreferencesService } from '@core/services/user-preferences-service';
 import { SwiperDirective } from '@shared/directives/swiper.directive';
@@ -19,16 +19,16 @@ import { ImgFallbackDirective } from '@shared/directives/img-fallback.directive'
 import { OnlineStatusService } from '@core/services/online-status.service';
 import { MatInputModule } from '@angular/material/input';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { StateMessage } from "../state-message/state-message";
+import { StateMessage } from "@shared/components/state-message/state-message";
 
 @Component({
   selector: 'app-provider-settings',
   imports: [TmdbImagePipe, MatDialogModule, MatButtonModule, MatChipsModule, MatIconModule, MatCheckboxModule, MatFormFieldModule, FormsModule, ReactiveFormsModule, IconChipComponent, DecimalPipe, SwiperDirective, MatProgressSpinnerModule, ImgFallbackDirective, MatInputModule, StateMessage],
-  templateUrl: './provider-settings.html',
-  styleUrl: './provider-settings.scss',
+  templateUrl: './title-filter-provider-config.html',
+  styleUrl: './title-filter-provider-config.scss',
 })
-export class ProviderSettings {
-  readonly #dialogRef = inject(MatDialogRef<ProviderSettings>);
+export class TitleFilterProviderConfigComponent {
+  readonly #dialogRef = inject(MatDialogRef<TitleFilterProviderConfigComponent>);
   readonly #tmdbApiService = inject(TmdbApiService);
   readonly #userPreferencesService = inject(UserPreferencesService);
   readonly #onlineStatus = inject(OnlineStatusService);

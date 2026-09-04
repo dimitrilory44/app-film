@@ -7,6 +7,7 @@ import { makeRangeHelpers, makeSelectionHelpers } from '@shared/helpers/collecti
 })
 export class UserPreferencesService {
   readonly STORAGE_KEY = 'data';
+  readonly defaultReleaseDate = { startYear: 1900, endYear: new Date().getFullYear() };
 
   readonly selectedData = signal<UserPreferences>(this.#loadFromStorage());
 
@@ -16,7 +17,7 @@ export class UserPreferencesService {
   readonly selectedCriteria = computed(() => this.selectedData().selectedCriteria);
 
   readonly genreHelpers = makeSelectionHelpers('genders', this.selectedCriteria);
-  readonly releaseDateHelpers = makeRangeHelpers('release', this.selectedCriteria, { startYear: 1900, endYear: new Date().getFullYear() });
+  readonly releaseDateHelpers = makeRangeHelpers('release', this.selectedCriteria, this.defaultReleaseDate, (a, b) => a.startYear === b.startYear && a.endYear === b.endYear);
 
   #loadFromStorage(): UserPreferences {
     const raw = localStorage.getItem(this.STORAGE_KEY);

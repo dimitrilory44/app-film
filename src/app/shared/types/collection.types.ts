@@ -8,4 +8,11 @@ export type Media = MovieMedia | SeriesMedia;
 
 export type CriteriaItem =
   | CriteriaRangeItem<'release'>
-  | CriteriaListItem<'genders'>;
+  | CriteriaListItem<'genders'>
+  | CriteriaRangeItem<'note'>
+  | CriteriaListItem<'notes'>
+  | CriteriaListItem<'country'>
+  | CriteriaRangeItem<'duration'>
+  | CriteriaListItem<'age'>
+  | CriteriaListItem<'moviesAge'>
+  | CriteriaListItem<'seriesAge'>

@@ -1,5 +1,5 @@
-import { Component, effect, inject, linkedSignal, signal } from '@angular/core';
-import { MatMenuModule } from "@angular/material/menu";
+import { Component, computed, effect, inject, linkedSignal, signal, ViewChild } from '@angular/core';
+import { MatMenu, MatMenuModule } from "@angular/material/menu";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 import { Criteria, Genre, ReleaseDate } from '@core/models/media-model';
@@ -22,13 +22,26 @@ export class TitleFilterCriteriaComponent {
   readonly #tmdbApiService = inject(TmdbApiService);
   readonly #formBuilder = inject(FormBuilder);
 
+  @ViewChild('monoMenu') monoMenu!: MatMenu;
+  @ViewChild('combinedMenu') combinedMenu!: MatMenu;
+
   readonly selectedRange = signal<'thisYear' | 'lastYear' | null>(null);
   readonly currentYear = new Date().getFullYear();
+  multiCriteria: CriteriaItem[] = [];
 
-  readonly criterias: CriteriaItem[] = [
-    { id: 0, key: 'release', type: 'range', hasSelected: signal(false) },
-    { id: 1, key: 'genders', type: 'list', hasSelected: signal(false), value: signal(this.#tmdbApiService.allGenders()) }
+  readonly criteria: CriteriaItem[] = [
+    { id: 0, key: 'release', type: 'range', hasSelected: false },
+    { id: 1, key: 'genders', type: 'list', hasSelected: false, value: signal(this.#tmdbApiService.allGenders()) },
+    { id: 2, key: 'note', type: 'range', hasSelected: false },
+    { id: 3, key: 'notes', type: 'list', groupKeyWith: 'note' },
+    { id: 4, key: 'country', type: 'list', value: signal([]) },
+    { id: 5, key: 'duration', type: 'range' },
+    { id: 6, key: 'age', type: 'list', value: signal([]) },
+    { id: 7, key: 'moviesAge', type: 'list', groupKeyWith: 'age', value: signal([]) },
+    { id: 8, key: 'seriesAge', type: 'list', groupKeyWith: 'age', value: signal([])}
   ];
+
+  readonly filteredCriteria = computed(() => this.criteria.filter(c => !c.groupKeyWith));
 
   form = this.#formBuilder.group({
     releaseDates: this.#formBuilder.array<FormGroup>([])
@@ -61,13 +74,30 @@ export class TitleFilterCriteriaComponent {
     switch (key) {
       case 'release': return 'Année de sortie';
       case 'genders': return 'Genres';
+      case 'note': return 'Note';
+      case 'notes': return 'Nombres de notes';
+      case 'country': return 'Pays de production';
+      case 'duration': return 'Durée';
+      case 'age': return 'Age'
+      case 'moviesAge': return 'Films';
+      case 'seriesAge': return 'Séries'
       default: return '';
     }
   }
 
-  onGenresMenuOpened(id: number) { this.criterias[id].hasSelected.set(true); }
+  isMultiMode(key: string): boolean {
+    return this.criteria.some(item => item.groupKeyWith === key);
+  }
 
-  onGenresMenuClosed(id: number) { this.criterias[id].hasSelected.set(false); }
+  onGenresMenuOpened(id: number, key: string) {
+    this.multiCriteria = this.criteria.filter(item => item.groupKeyWith === key || item.key === key);
+    this.criteria[id].hasSelected = true;
+  }
+
+  onGenresMenuClosed(id: number, key: string) {
+    this.multiCriteria = this.criteria.filter(item => item.groupKeyWith === key || item.key === key);
+    this.criteria[id].hasSelected = false;
+  }
 
   isSelectionSelected(key: string, idItem: number): boolean {
     switch (key) {
@@ -88,7 +118,6 @@ export class TitleFilterCriteriaComponent {
 
   reset(key: keyof Criteria) {
     this.#userPreferencesService.setCriteria(key, { startYear: 1900, endYear: new Date().getFullYear() } as ReleaseDate);
-    console.log(this.#userPreferencesService.releaseDateHelpers.isDefault());
   }
 
   resetAll() {
@@ -149,12 +178,12 @@ export class TitleFilterCriteriaComponent {
   constructor() {
     // TOFIX : problème de synchro avec les valeurs de mat-slider (warning)
     effect(() => {
+      this.loadSelectedRange();
       if (this.#userPreferencesService.releaseDateHelpers.isDefault()) {
         this.releaseDates.clear();
         this.addReleaseDate({ startYear: 1900, endYear: new Date().getFullYear() });
       } else {
         this.releaseDates.clear();
-        this.loadSelectedRange();
         this.addReleaseDate(this.#userPreferencesService.releaseDateHelpers.items());
       }
     });

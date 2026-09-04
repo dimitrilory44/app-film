@@ -39,14 +39,14 @@
     gap: 4px;
     background: none;
     border: none;
-    color: #f5c518; // jaune vu sur ta capture
+    color: #f5c518;
     cursor: pointer;
   }
 
   &__box {
     display: flex;
     flex-direction: column;
-    padding: 0 15px;
+    padding: 10px 10px;
   }
 
   &__list {
@@ -56,7 +56,7 @@
   }
 
   &__range {
-    min-width: 450px;
+    min-width: 500px;
 
     &__slider {
       display: flex; 

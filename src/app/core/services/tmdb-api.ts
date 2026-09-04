@@ -77,18 +77,20 @@ export class TmdbApiService {
         watch_region: 'FR',
         page: page(),
         sort_by: 'popularity.desc',
-        with_watch_providers: this.providersIds(),
-        with_genres: this.genresIds(),
+        with_watch_providers: this.providersIds()
       };
 
       const isDateFilterActive = !this.#userPreferencesService.releaseDateHelpers.isDefault();
+      const isGenderFilterActive = this.#userPreferencesService.genreHelpers.hasItems();
 
-      if (isDateFilterActive) {
+      if (isDateFilterActive || isGenderFilterActive) {
         const { beginDate, endDate } = this.filterYear();
+        const genders = this.genresIds();
         const gteKey = mediaType === 'movie' ? 'primary_release_date.gte' : 'first_air_date.gte';
         const lteKey = mediaType === 'movie' ? 'primary_release_date.lte' : 'first_air_date.lte';
         params[gteKey] = beginDate;
         params[lteKey] = endDate;
+        params['with_genres'] = genders;
       }
 
       return {
